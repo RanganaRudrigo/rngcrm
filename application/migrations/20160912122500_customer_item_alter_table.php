@@ -19,7 +19,7 @@ class Migration_Customer_item_alter_table extends CI_Migration
                 'COMMENT' => "1 : RNG Property , 0 : Customer Property"
             ]
         ];
-        $this->dbforge->add_column('customer_item', $fields);
+//        $this->dbforge->add_column('customer_item', $fields);
     }
 
     public function down(){

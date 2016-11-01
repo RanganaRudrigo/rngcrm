@@ -17,7 +17,7 @@ class Migration_Job_order_close_item_old_serial_no extends CI_Migration
                 'constraint' => 50
             ]
         ];
-        $this->dbforge->add_column('job_order_close_item_serial_no', $fields);
+      //  $this->dbforge->add_column('job_order_close_item_serial_no', $fields);
     }
 
     public function down(){

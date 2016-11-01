@@ -18,7 +18,7 @@ class Migration_Job_order_close_star extends CI_Migration
                 'constraint' => 1
             ]
         ];
-        $this->dbforge->add_column('job_order_close', $fields);
+     //   $this->dbforge->add_column('job_order_close', $fields);
     }
 
     public function down(){

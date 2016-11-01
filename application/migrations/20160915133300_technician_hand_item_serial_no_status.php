@@ -24,7 +24,7 @@ class Migration_Technician_hand_item_serial_no_status extends CI_Migration
                 'default' => '1'
             ]
         ];
-        $this->dbforge->add_column('technician_hand_item_serial_no', $fields);
+     //   $this->dbforge->add_column('technician_hand_item_serial_no', $fields);
     }
 
     public function down(){

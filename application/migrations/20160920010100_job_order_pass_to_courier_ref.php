@@ -16,7 +16,7 @@ class Migration_Job_order_pass_to_courier_ref extends CI_Migration
                 'constraint' => 50  
             ]
         ];
-        $this->dbforge->add_column('job_order_pass_to_courier', $fields);
+      //  $this->dbforge->add_column('job_order_pass_to_courier', $fields);
     }
 
     public function down(){

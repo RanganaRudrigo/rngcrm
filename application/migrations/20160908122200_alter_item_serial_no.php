@@ -25,7 +25,7 @@ class Migration_Alter_item_serial_no extends CI_Migration
                 'COMMENT' => "1 : active , 0 : used"
             ] 
         ];
-        $this->dbforge->add_column('item_serial_no', $fields);
+      //  $this->dbforge->add_column('item_serial_no', $fields);
     }
     
     public function down(){

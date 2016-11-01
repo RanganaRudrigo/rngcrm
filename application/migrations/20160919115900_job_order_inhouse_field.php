@@ -17,7 +17,7 @@ class Migration_Job_order_inhouse_field extends CI_Migration
                 'default' => '0'
             ]
         ];
-        $this->dbforge->add_column('job_order', $fields);
+        //$this->dbforge->add_column('job_order', $fields);
     }
 
     public function down(){

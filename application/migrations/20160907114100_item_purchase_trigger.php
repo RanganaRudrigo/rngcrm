@@ -16,7 +16,7 @@ class Migration_Item_purchase_trigger extends CI_Migration
 
     public function up()
     {
-        $this->db->query("SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';");
+      /*  $this->db->query("SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';");
 
         $this->db->query(" 
         CREATE TRIGGER `item_purchase_trigger` AFTER INSERT ON `item_purchase_detail` FOR EACH ROW begin 
@@ -24,7 +24,7 @@ class Migration_Item_purchase_trigger extends CI_Migration
 	        where  item.ItemId = new.ItemId ;
         END 
         ");
-        $this->db->query("SET SQL_MODE=@OLDTMP_SQL_MODE; ");
+        $this->db->query("SET SQL_MODE=@OLDTMP_SQL_MODE; ");*/
     }
 
     public function down()

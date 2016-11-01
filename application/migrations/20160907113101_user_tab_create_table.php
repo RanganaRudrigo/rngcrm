@@ -55,7 +55,7 @@ class Migration_User_tab_create_table extends CI_Migration
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('user_id',TRUE);
         $this->dbforge->create_table('user_tab',TRUE);
-        $this->db->insert("user_tab",[
+       /* $this->db->insert("user_tab",[
             'user_id' => '1', 
             'type' => '1', 
             'name' => 'admin', 
@@ -66,7 +66,7 @@ class Migration_User_tab_create_table extends CI_Migration
             'ModifiedBy' => '0', 
             'ModifiedDate' => '2016-07-24 18:29:19', 
             'Status' => '1'
-        ]);
+        ]);*/
     }
 
     public function down()

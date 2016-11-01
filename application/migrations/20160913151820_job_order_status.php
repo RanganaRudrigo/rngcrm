@@ -18,14 +18,14 @@ class Migration_Job_order_status extends CI_Migration
     public function up()
     {
 		 
-        $fields = [
+       /* $fields = [
             "JobStatus" => [
                 'type' => 'INT',
                 'constraint' => 1 ,
                 'default' => 0
             ]
         ];
-        $this->dbforge->add_column('job_order', $fields);
+        $this->dbforge->add_column('job_order', $fields);*/
     }
 
     public function down(){

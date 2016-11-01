@@ -10,7 +10,7 @@ class Migration_Technician_item_remove_trigger extends CI_Migration
 
     public function up()
     {
-        $this->db->query("SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';");
+       /* $this->db->query("SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';");
 
         $this->db->query(" 
         CREATE TRIGGER `Technician_item_takeout_remove_trigger` AFTER DELETE ON `technician_hand_item` FOR EACH ROW begin 
@@ -18,7 +18,7 @@ class Migration_Technician_item_remove_trigger extends CI_Migration
 	        where  item.ItemId = old.ItemId ;
         END 
         ");
-        $this->db->query("SET SQL_MODE=@OLDTMP_SQL_MODE; ");
+        $this->db->query("SET SQL_MODE=@OLDTMP_SQL_MODE; ");*/
     }
 
     public function down()

@@ -16,7 +16,7 @@ class Migration_Technician_item_create_view extends CI_Migration
 
     public function up()
     {
-        $this->db->query("SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';");
+        /*$this->db->query("SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';");
 
         $this->db->query(" 
         Create view technician_items AS
@@ -28,7 +28,7 @@ join technician_hand_item on
 join technician_hand on 
 technician_hand_item.TechnicianHandId = technician_hand.TechnicianHandId
         ");
-        $this->db->query("SET SQL_MODE=@OLDTMP_SQL_MODE; ");
+        $this->db->query("SET SQL_MODE=@OLDTMP_SQL_MODE; ");*/
     }
 
     public function down()

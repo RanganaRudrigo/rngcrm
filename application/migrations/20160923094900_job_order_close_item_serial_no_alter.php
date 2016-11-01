@@ -22,7 +22,7 @@ class Migration_Job_order_close_item_serial_no_alter extends CI_Migration
                 'default' => 1
             ]
         ];
-        $this->dbforge->add_column('job_order_close_item_serial_no', $fields);
+       // $this->dbforge->add_column('job_order_close_item_serial_no', $fields);
         $this->db->query("
         update job_order_close_item_serial_no  
 left join job_order_close_item  on

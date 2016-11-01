@@ -1,6 +1,6 @@
 <?php
 
-class Migration_Replaced_item_return_table_create extends CI_Migration
+class Migration_Replaced1_item_return_table_create extends CI_Migration
 {
     public function __construct()
     {
