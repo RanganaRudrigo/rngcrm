@@ -1,0 +1,40 @@
+.m_b_10{
+	margin-bottom:  10px !important;
+}
+
+
+.name-1 { width:20%; float:left; margin-right:2%;}
+.name-2 { width:78%; float:left;}
+.code-1 { width:50%;}
+.header-title {
+   margin-bottom: 10px !important;
+   padding-bottom: 10px !important;
+   margin-top: 10px !important;
+   border-bottom: 1px dotted #ddd ;
+}
+
+.price{
+    text-align: right;
+}
+
+.hidden{
+	visibility:hidden;
+	display:none;
+}
+
+#datatable td i {
+    font-size: 30px;
+}
+
+    #StockAlert:disabled, .form-control[readonly], .success  {
+        background-color: #B6E9DF;
+        border-color: #a2e3d6;
+        color: #1bb99a;
+        opacity: 1;
+    }
+
+    #StockAlert:disabled, .form-control[readonly], .danger  {
+        background-color: #FFCCC5;
+        border-color: #ffb6ac;
+        color: #ff3015;
+    }

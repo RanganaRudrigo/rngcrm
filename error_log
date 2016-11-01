@@ -1,0 +1,12 @@
+[06-Sep-2016 11:42:59 UTC] PHP Parse error:  syntax error, unexpected '<' in /home/alicpanl/public_html/application/views/pages/technician/create.php on line 46
+[06-Sep-2016 11:43:05 UTC] PHP Parse error:  syntax error, unexpected '<' in /home/alicpanl/public_html/application/views/pages/technician/create.php on line 46
+[10-Sep-2016 08:44:14 Asia/Colombo] PHP Fatal error:  Call to undefined method Item_model::getPrimaryKey() in /home/alicpanl/public_html/application/controllers/Technician.php on line 132
+[10-Sep-2016 08:45:06 Asia/Colombo] PHP Fatal error:  Call to undefined method Item_model::getPrimaryKey() in /home/alicpanl/public_html/application/controllers/Technician.php on line 132
+[21-Sep-2016 16:32:24 Asia/Colombo] PHP Fatal error:  Call to undefined method Item_replace_model::with() in /home/alicpanl/public_html/application/controllers/Courier.php on line 292
+[04-Oct-2016 09:45:26 Asia/Colombo] PHP Fatal error:  Call to a member function num_rows() on a non-object in /home/alicpanl/public_html/application/libraries/MY_Form_validation.php on line 36
+[04-Oct-2016 09:46:40 Asia/Colombo] PHP Fatal error:  Call to a member function num_rows() on a non-object in /home/alicpanl/public_html/application/libraries/MY_Form_validation.php on line 36
+[25-Oct-2016 10:46:03 Asia/Colombo] PHP Fatal error:  Call to a member function result() on a non-object in /home/alicpanl/public_html/application/core/Base_Model.php on line 186
+[25-Oct-2016 10:46:22 Asia/Colombo] PHP Fatal error:  Call to a member function result() on a non-object in /home/alicpanl/public_html/application/core/Base_Model.php on line 186
+[25-Oct-2016 10:59:17 Asia/Colombo] PHP Fatal error:  Call to a member function result() on a non-object in /home/alicpanl/public_html/application/core/Base_Model.php on line 186
+[25-Oct-2016 10:59:20 Asia/Colombo] PHP Fatal error:  Call to a member function result() on a non-object in /home/alicpanl/public_html/application/core/Base_Model.php on line 186
+[25-Oct-2016 19:38:28 Asia/Colombo] PHP Fatal error:  Call to a member function result() on a non-object in /home/alicpanl/public_html/application/core/Base_Model.php on line 186
