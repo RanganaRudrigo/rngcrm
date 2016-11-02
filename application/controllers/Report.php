@@ -110,7 +110,6 @@ class Report extends MY_Controller
         $this->view($d);
     }
 
-
     function _All_Jobs(){
         if($this->input->get('daterange')){
             $date = explode("-",$this->input->get('daterange'));
@@ -270,6 +269,35 @@ class Report extends MY_Controller
         $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
         $d["page"] = "$this->page/job_order";
         return $d;
+    }
+
+    function purchase_report(){
+
+        $this->load->model("Item_model",'item');
+        $this->load->model("Item_purchase",'model');
+        $this->load->model("Purchase_item_detail",'detail');
+        $this->load->model("Item_serial_no",'serial');
+
+        $this->check_permission("Purchase","view");
+        $this->load->model("supplier_model",'supplier');
+        $suppliers = $this->supplier->get_many_by(['Status'=>1]);
+        $d['suppliers'][0] = "All Suplier";
+        foreach ($suppliers as $k => $customer ){
+            $d['suppliers'][$customer->SupplierId] =  "$customer->sup_code > $customer->contact_person > $customer->company " ;
+        }
+        $supplier = $this->supplier->table();
+        $supplierKey = $this->supplier->getPrimaryKey();
+        $itemPurchase = $this->model->table();
+        $this->db->join($supplier,"$supplier.$supplierKey = $itemPurchase.$supplierKey");
+        $this->db->select("$itemPurchase.* , title , contact_person , company");
+       // p($this->model->with('Items')->get_many_by(['status'=> 1]));
+        $d['page'] = "$this->page/purchase_report" ;
+        if($this->input->get('Supplier')){
+            $this->db->where("$supplier.SupplierId" ,$this->input->get('Supplier')  );
+        }
+        $d['records'] =$this->model->with('Items')->get_many_by(['status'=> 1]) ;
+
+        $this->view($d);
     }
 
 }

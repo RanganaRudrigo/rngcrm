@@ -8,4 +8,8 @@ class Item_purchase extends MY_Model
     protected $before_create = ['prop_data_before_create'] ;
     protected $before_update = ['prop_data_before_update'] ;
 
+    var $has_many = [
+        "Items" => ["model" => "Purchase_item_detail" ,"primary_key" => "PurchaseId"  ]
+    ];
+
 }

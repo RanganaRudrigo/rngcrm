@@ -292,6 +292,10 @@
                             <a href="<?= base_url('report/job_order') ?>" class="waves-effect">
                                 <span> Job Order </span>  </a>
                         </li>
+                        <li  >
+                            <a href="<?= base_url('report/purchase_report') ?>" class="waves-effect">
+                                <span> Purchase Report </span>  </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="has_sub">
