@@ -60,6 +60,9 @@
                                         <?= $k%4==3 || count($reports) == $k+1 ?  '</fieldset>' : '' ?>
                                     <?php endforeach; ?>
 
+                                <div class="field_binder" >
+
+                                </div>
 
 
                                 <div class="col-lg-12" >
@@ -68,6 +71,19 @@
                                 </div>
                             </div>
                             <?= form_close() ?>
+
+                            <fieldset id="Customer_Wise_Reports_field" class="form-group col-lg-3  hidden extra_field ">
+                                <label for="exampleInputEmail1"> Customers </label>
+                                <div>
+                                    <?= form_dropdown("Customer",$customers,$this->input->get('Customer'),"class='form-control '") ?>
+                                </div>
+                            </fieldset>
+                            <fieldset id="Technician_Wise_Reports_field" class="form-group col-lg-3  hidden extra_field ">
+                                <label for="exampleInputEmail1"> Technician </label>
+                                <div>
+                                    <?= form_dropdown("Technician",$technicians,$this->input->get('Technician'),"class='form-control '") ?>
+                                </div>
+                            </fieldset>
 
                         </div>
                     </div>
@@ -167,13 +183,17 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#datatable').DataTable();
+          //  $('#datatable').DataTable();
             $(".button-menu-mobile").click();
             //Buttons examples
             var table = $('#datatable-buttons').DataTable({
                 lengthChange: false,
-                buttons: ['copy', 'excel', 'pdf', 'colvis']
+                buttons: ['copy', 'excel', 'colvis']
             });
+
+            table.buttons().container()
+                .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+
 
             $('.input-daterange-datepicker').daterangepicker({
                 format: 'MM/DD/YYYY',
@@ -200,6 +220,28 @@
                     firstDay: 1
                 }
             });
+            
+            $("input[type=radio]").click(function () {
+                $(".field_binder").find('.extra_field').remove();
+            });
+
+            $("#Customer_Wise_Reports").click(function () {
+                $(".field_binder").find('.extra_field').remove();
+                var cus = $("#Customer_Wise_Reports_field").clone();
+                cus.removeClass('hidden').appendTo(".field_binder");
+            })
+            <?php if( isset($_GET['Customer']) ): ?>
+                .trigger('click');
+            <?php endif; ?>;
+            
+            $("#Technician_Wise_Reports").click(function () {
+                $(".field_binder").find('.extra_field').remove();
+                var cus = $("#Technician_Wise_Reports_field").clone();
+                cus.removeClass('hidden').appendTo(".field_binder");
+            })
+            <?php if( isset($_GET['Technician']) ): ?>
+                .trigger('click');
+            <?php endif; ?>;
 
         });
 

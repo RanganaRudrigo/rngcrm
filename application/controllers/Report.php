@@ -78,26 +78,38 @@ class Report extends MY_Controller
         $d['reports'] = [
             'Parts_Pending_Job' ,
             'Quotation_Pending' ,
-            'Tem_Solution' ,
+            'Temporary_Solution' ,
             'Not_Attend_Jobs' ,
             'Workshop_Pending_Report' ,
             'Technician_Wise_Reports' ,
             'Customer_Wise_Reports' ,
             'Completed_Jobs' ,
-            'Daily_Job_Reports' ,
+          //  'Daily_Job_Reports' ,
             'All_Jobs' ,
         ];
         
         $this->load->model("Joborder_model");
-        $d['records'] = $this->input->get('jobType') ? call_user_func([get_class(),"_".$this->input->get('jobType')]) : call_user_func([get_class(),"_All_Jobs"])   ;
 
-        $d["page"] = "$this->page/job_order";
+        $this->load->model("Customer_model");
+        $customers = $this->Customer_model->fields('cus_code,customerName,company,CustomerId')->get_many_by(['Status'=>1]);
+        $d['customers'][0] = "All Customer";
+        foreach ($customers as $k => $customer ){
+            $d['customers'][$customer->CustomerId] =  "$customer->cus_code > $customer->customerName > $customer->company " ;
+        }
+
+        $this->load->model("Technician_model");
+        $technicians = $this->Technician_model->fields('tec_code,title,technicianName,TechnicianId')->get_many_by(['Status'=>1]);
+        $d['technicians'][0] = "All Technician";
+        foreach ($technicians as $k => $technician ){
+            $d['technicians'][$technician->TechnicianId] =  "$technician->tec_code > $technician->title$technician->technicianName " ;
+        }
+
+        $d = array_merge($d,
+            $this->input->get('jobType') ? call_user_func([get_class(),"_".$this->input->get('jobType')]) : call_user_func([get_class(),"_All_Jobs"])
+                );
         $this->view($d);
     }
 
-    function _part_pending(){
-
-    }
 
     function _All_Jobs(){
         if($this->input->get('daterange')){
@@ -105,7 +117,9 @@ class Report extends MY_Controller
             $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
             $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
         }
-        return $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+        $d["page"] = "$this->page/job_order";
+        return $d;
     }
 
     function _Parts_Pending_Job(){
@@ -118,6 +132,144 @@ class Report extends MY_Controller
         $this->db->join('job_order_to_technician_remove', "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}")
             ->where('reason','part pending');
 
-        return $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+        $d["page"] = "$this->page/job_order";
+        return $d;
     }
+
+    function _Quotation_Pending(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+        $this->load->model('Job_order_close_model');
+
+        $this->db->join( $this->Job_order_close_model->table() ,
+            "{$this->Job_order_close_model->table()}.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}"  )
+            ->where([
+                "PartUsedFor" => 2 ,
+                "{$this->Job_order_close_model->table()}.Status" => 1
+            ])->select("{$this->Joborder_model->table()}.* , {$this->Job_order_close_model->table()}.Note as complainDetails");
+
+
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+
+
+        $d["page"] = "$this->page/job_order";
+        return $d;
+    }
+
+    // still pending
+    function _Not_Attend_Jobs(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")
+            ->get_many_by(["Status"=>1 ,'JobStatus'=>1 , 'inHouse'=>0 ]);
+
+        $d["page"] = "$this->page/job_order";
+        return $d;
+    }
+
+    function _Completed_Jobs(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+        $this->load->model('Job_order_close_model');
+
+        $this->db->join( $this->Job_order_close_model->table() ,
+            "{$this->Job_order_close_model->table()}.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}"  )
+            ->where([
+                "PartUsedFor!=" => 2 ,
+                "{$this->Job_order_close_model->table()}.Status" => 1
+            ])->select("{$this->Joborder_model->table()}.* , {$this->Job_order_close_model->table()}.Note as complainDetails");
+
+
+
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")
+            ->get_many_by(["Status"=>1 ,'JobStatus'=>2 ]);
+
+
+        $d["page"] = "$this->page/job_order";
+        return $d;
+    }
+
+    function _Customer_Wise_Reports(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+        if($this->input->get('Customer')){
+            $this->db->where("CustomerId", $this->input->get('Customer') );
+        }
+
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+        $d["page"] = "$this->page/job_order";
+        return $d;
+    }
+
+
+    function _Technician_Wise_Reports(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+        $this->load->model('Job_order_technician_model');
+
+        $this->db->join($this->Job_order_technician_model->table() ,
+            "{$this->Job_order_technician_model->table()}.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}"
+        ,"RIGHT");
+
+        if($this->input->get('Technician')){
+            $this->db->where("TechnicianId", $this->input->get('Technician') );
+        }
+
+
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+        $d["page"] = "$this->page/job_order";
+        return $d;
+    }
+
+    function _Workshop_Pending_Report(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+
+
+
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")
+            ->get_many_by(["Status"=>1,'inHouse'=>1 ,'JobStatus !='=>2]);
+        $d["page"] = "$this->page/job_order";
+        return $d;
+    }
+
+    function _Temporary_Solution(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+        $this->db->join('job_order_to_technician_remove', "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}")
+            ->where('reason','temporary solution');
+
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+        $d["page"] = "$this->page/job_order";
+        return $d;
+    }
+
 }
