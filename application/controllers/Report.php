@@ -74,21 +74,50 @@ class Report extends MY_Controller
     }
 
     function job_order(){
- 
-        if($this->input->post('daterange')){
-            $date = explode("-",$this->input->post('daterange'));
-            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
-            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
-        }
-
+        
+        $d['reports'] = [
+            'Parts_Pending_Job' ,
+            'Quotation_Pending' ,
+            'Tem_Solution' ,
+            'Not_Attend_Jobs' ,
+            'Workshop_Pending_Report' ,
+            'Technician_Wise_Reports' ,
+            'Customer_Wise_Reports' ,
+            'Completed_Jobs' ,
+            'Daily_Job_Reports' ,
+            'All_Jobs' ,
+        ];
+        
         $this->load->model("Joborder_model");
-
-        $records = $this->Joborder_model->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
-
-        $d['records'] = $records ;
+        $d['records'] = $this->input->get('jobType') ? call_user_func([get_class(),"_".$this->input->get('jobType')]) : call_user_func([get_class(),"_All_Jobs"])   ;
 
         $d["page"] = "$this->page/job_order";
         $this->view($d);
     }
 
+    function _part_pending(){
+
+    }
+
+    function _All_Jobs(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+        return $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+    }
+
+    function _Parts_Pending_Job(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+        $this->db->join('job_order_to_technician_remove', "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}")
+            ->where('reason','part pending');
+
+        return $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+    }
 }

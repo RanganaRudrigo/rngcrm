@@ -1,5 +1,5 @@
 <?php $this->view('includes/header_start.php'); ?>
-    <!-- extra css start -->
+  <!-- extra css start -->
     <link href="<?= base_url("assets/plugins/datatables/dataTables.bootstrap4.min.css") ?>" rel="stylesheet" type="text/css" />
     <link href="<?= base_url("assets/plugins/datatables/buttons.bootstrap4.min.css") ?>" rel="stylesheet" type="text/css" />
     <link href="<?= base_url("assets/plugins/datatables/responsive.bootstrap4.min.css") ?>" rel="stylesheet" type="text/css" />
@@ -42,83 +42,29 @@
                         <div class="card-box">
                             <h4 class="header-title m-t-0 m-b-30">Filter Option</h4>
 
-                            <?= form_open() ?>
+                            <?= form_open('',['method'=>'get']) ?>
                             <div class="row" >
                                 <fieldset class="form-group col-lg-3 ">
                                     <label for="exampleInputEmail1"> Date Range </label>
                                     <div>
-                                        <input class="form-control input-daterange-datepicker" type="text" name="daterange" value=""/>
+                                        <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="<?= $this->input->get('daterange') ?>"/>
                                     </div>
                                 </fieldset>
-                                <fieldset class="form-group col-lg-4 ">
-                                    <div class="radio">
-                                        <input type="radio" name="jobType" id="part_pending" value="Parts Pending Job" />
-                                        <label for="part_pending">
-                                            Parts Pending Job
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <input type="radio" name="jobType" id="quotation_pending" value="Quotation Pending" />
-                                        <label for="quotation_pending">
-                                            Quotation Pending
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <input type="radio" name="jobType" id="tem_solution" value="Tem.Solution" />
-                                        <label for="tem_solution">
-                                            Tem.Solution
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <input type="radio" name="jobType" id="no_attend_job" value="Not Attend Jobs" />
-                                        <label for="no_attend_job">
-                                            Not Attend Jobs
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <input type="radio" name="jobType" id="Workshop_Pending_Report" value="Workshop Pending Report" />
-                                        <label for="Workshop_Pending_Report">
-                                            Workshop Pending Report
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <input type="radio" name="jobType" id="Technician_Wise_Reports" value="Technician Wise Reports" />
-                                        <label for="Technician_Wise_Reports">
-                                            Technician Wise Reports
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <input type="radio" name="jobType" id="Customer_Wise_Reports" value="Customer Wise Reports" />
-                                        <label for="Customer_Wise_Reports">
-                                            Customer Wise Reports
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <input type="radio" name="jobType" id="Completed_Jobs" value="Completed Jobs" />
-                                        <label for="Completed_Jobs">
-                                            Completed Jobs
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <input type="radio" name="jobType" id="Daily_Job_Reports" value="Daily Job Reports" />
-                                        <label for="Daily_Job_Reports">
-                                            Daily Job Reports
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <input type="radio" name="jobType" id="All_Jobs" value="All Jobs" />
-                                        <label for="All_Jobs">
-                                            All Jobs
-                                        </label>
-                                    </div>
-s
 
-                                </fieldset>
+                                    <?php foreach ($reports as $k => $re ): ?>
+                                        <?= $k%4==0 ?  '<fieldset class="form-group col-lg-3 ">' : '' ?>
+                                        <div class="radio">
+                                            <?= form_radio('jobType',$re,$this->input->get('jobType') == $re ,['id'=>$re]) ?>
+                                            <?= form_label(str_replace('_'," ",$re), '',['for'=>$re] ) ?>
+                                        </div>
+                                        <?= $k%4==3 || count($reports) == $k+1 ?  '</fieldset>' : '' ?>
+                                    <?php endforeach; ?>
 
 
-                                <div class="col-lg-4 col-lg-offset-4" >
+
+                                <div class="col-lg-12" >
                                     <label> &nbsp; </label>
-                                    <button class="btn btn-primary" > Filter </button>
+                                    <button class="btn btn-primary pull-right" > Filter </button>
                                 </div>
                             </div>
                             <?= form_close() ?>
@@ -138,11 +84,13 @@ s
                                             <th> Complain Date </th>
                                             <th> Job Order No </th>
                                             <th> For </th>
-                                            <th> Customer Name </th>
+                                            <th> Customer  </th>
                                             <th> Item Name </th>
                                             <th> Serial No </th>
+                                            <th> Tech </th>
                                             <th> Repair Mode </th>
                                             <th> Status </th>
+                                            <th> Note </th>
 
                                         </tr>
                                         </thead>
@@ -156,6 +104,7 @@ s
                                                 <td> <?= "({$row->Customer->cus_code}){$row->Customer->company} - {$row->Customer->customerName}" ?> </td>
                                                 <td> <?= $row->Item->ItemName ?> </td>
                                                 <td> <?= $row->SerialNo ?> </td>
+                                                <td> <?= !empty($row->JOB_TO_TECH)? $row->JOB_TO_TECH->Technician->title.$row->JOB_TO_TECH->Technician->technicianName:"-" ?> </td>
                                                 <td> <?= $row->Repair->rep_mode_name ?> </td>
                                                 <td> <?php if(!$row->inHouse ){
                                                         if($row->JobStatus == 0)
@@ -176,8 +125,7 @@ s
                                                         elseif($row->JobStatus == 2)
                                                             echo "Complete" ;
                                                     } ?> </td>
-
-
+                                                <td> <?= $row->complainDetails ?> </td>
                                             </tr>
                                         <?php endforeach; ?>
                                         </tbody>
@@ -229,32 +177,18 @@ s
 
             $('.input-daterange-datepicker').daterangepicker({
                 format: 'MM/DD/YYYY',
-                startDate: moment().subtract(29, 'days'),
-                endDate: moment(),
                 minDate: '01/01/2012',
-                maxDate: '12/31/2016',
-                dateLimit: {
-                    days: 60
-                },
+                maxDate: new Date(),
                 showDropdowns: true,
-                showWeekNumbers: true,
-                timePicker: false,
-                timePickerIncrement: 1,
-                timePicker12Hour: true,
+                linkedCalendars: false,
                 ranges: {
                     'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')]  ,
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 },
-                opens: 'left',
-                drops: 'down',
-                buttonClasses: ['btn', 'btn-sm'],
-                applyClass: 'btn-custom',
-                cancelClass: 'btn-secondary',
-                separator: ' to ',
                 locale: {
                     applyLabel: 'Submit',
                     cancelLabel: 'Cancel',
