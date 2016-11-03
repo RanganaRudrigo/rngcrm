@@ -17,16 +17,16 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="page-title-box">
-                        <h4 class="page-title">Technician</h4>
+                        <h4 class="page-title">Technician Item Return Report</h4>
                         <ol class="breadcrumb p-0">
                             <li>
                                 <a href="<?= base_url() ?>">Dashboard</a>
                             </li>
                             <li>
-                                <a href="<?= base_url('technician') ?>">Technician</a>
+                                <a href="#">Report</a>
                             </li>
                             <li class="active">
-                                Manage
+                                Technician Item Return Report
                             </li>
                         </ol>
                         <div class="clearfix"></div>
@@ -36,36 +36,37 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="row" >
-                        <div class="col-lg-12" >
-                            <a class="btn btn-info m_b_10 pull-left fa fa-plus " href="<?= base_url('technician/item_takeout')  ?>"  > Create New </a>
-                        </div>
-                    </div>
                     <div class="card-box">
-                        <h4 class="header-title m-t-0 m-b-30">Technician Details</h4>
-
                         <div class="row">
                             <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
-                                <table id="datatable" class=" table table-striped " >
+                                <table  id="datatable-buttons" class=" table table-striped " >
                                     <thead>
                                     <tr>
                                         <th> # </th>
-                                        <th> Date </th>
-                                        <th> Technician </th>
-                                        <th> Action </th>
+                                        <th> Return Date </th>
+                                        <th> Tech Name </th>
+                                        <th> Item Code </th>
+                                        <th> Item Name </th>
+                                        <th> Serial List </th>
+                                        <th> Qty </th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php foreach ($records as $k => $row): ?>
-                                        <tr>
-                                            <td> <?= $k+1 ?>  </td>
-                                            <td> <?= date("Y-m-d",strtotime($row->CreatedDate)) ?> </td>
-                                            <td><?= $row->TECH->technicianName  ?> </td>
-                                            <td class="text-center" >
-                                                <a href="<?= current_url()."/view/$row->TechnicianHandId" ?>" target="_blank" class="btn btn-warning fa fa-list  " > View </a>
-                                              <!--  <a href="<?= current_url()."/delete/$row->TechnicianHandId" ?>" class="btn btn-danger fa fa-times delete-btn " > Delete </a> -->
-                                            </td>
-                                        </tr>
+                                        <?php foreach ($row->ITEM as $item ): ?>
+                                            <tr>
+                                                <td> <?= $k+1 ?>  </td>
+                                                <td> <?= $row->CreatedDate ?> </td>
+                                                <td><?= $row->TECH->title.$row->TECH->technicianName  ?> </td>
+                                                <td><?= $item->Item->ItemCode  ?></td>
+                                                <td><?= $item->Item->ItemName ?></td>
+                                                <td><?php
+                                                    foreach ($item->SerialList as $k => $list)
+                                                        echo ($k?", ":"").($list->SerialNo);
+                                                    ?></td>
+                                                <td><?= $item->Qty  ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
                                     <?php endforeach; ?>
                                     </tbody>
                                 </table>
@@ -103,11 +104,13 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#datatable').DataTable();
+        $(".button-menu-mobile").click();
         //Buttons examples
         var table = $('#datatable-buttons').DataTable({
             lengthChange: false,
-            buttons: ['copy', 'excel', 'pdf', 'colvis']
+            buttons: ['copy', 'excel',  'colvis']
         });
         table.buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
     });
+
 </script>

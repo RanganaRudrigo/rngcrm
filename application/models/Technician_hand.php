@@ -11,5 +11,8 @@ class Technician_hand extends MY_Model
     var $belongs_to = [
         "TECH" => ["model"=>"Technician_model","primary_key"=>"TechnicianId"]
     ];
+    var $has_many = [
+        "ITEM" => ["model"=>"Technician_hand_item","primary_key"=>"TechnicianHandId"]
+    ];
  
 }

@@ -17,13 +17,13 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="page-title-box">
-                        <h4 class="page-title">Technician</h4>
+                        <h4 class="page-title">Courier</h4>
                         <ol class="breadcrumb p-0">
                             <li>
                                 <a href="<?= base_url() ?>">Dashboard</a>
                             </li>
                             <li>
-                                <a href="<?= base_url('technician') ?>">Technician</a>
+                                <a href="<?= base_url('courier') ?>">Courier</a>
                             </li>
                             <li class="active">
                                 Manage
@@ -38,33 +38,30 @@
                 <div class="col-sm-12">
                     <div class="row" >
                         <div class="col-lg-12" >
-                            <a class="btn btn-info m_b_10 pull-left fa fa-plus " href="<?= base_url('technician/item_takeout')  ?>"  > Create New </a>
+                            <a class="btn btn-info m_b_10 pull-left fa fa-plus " href="<?= base_url("courier/new_request/") ?>"  > Create New </a>
                         </div>
                     </div>
                     <div class="card-box">
-                        <h4 class="header-title m-t-0 m-b-30">Technician Details</h4>
+                        <h4 class="header-title m-t-0 m-b-30">Courier Details</h4>
 
                         <div class="row">
                             <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
-                                <table id="datatable" class=" table table-striped " >
-                                    <thead>
+                                <table class="table" id='datatable'>
+                                    <thead class="thead-default">
                                     <tr>
-                                        <th> # </th>
-                                        <th> Date </th>
-                                        <th> Technician </th>
-                                        <th> Action </th>
+                                        <th>#</th>
+                                        <th>Job Order No</th>
+                                        <th>Customer</th>
+                                        <th>Complain Date</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php foreach ($records as $k => $row): ?>
-                                        <tr>
-                                            <td> <?= $k+1 ?>  </td>
-                                            <td> <?= date("Y-m-d",strtotime($row->CreatedDate)) ?> </td>
-                                            <td><?= $row->TECH->technicianName  ?> </td>
-                                            <td class="text-center" >
-                                                <a href="<?= current_url()."/view/$row->TechnicianHandId" ?>" target="_blank" class="btn btn-warning fa fa-list  " > View </a>
-                                              <!--  <a href="<?= current_url()."/delete/$row->TechnicianHandId" ?>" class="btn btn-danger fa fa-times delete-btn " > Delete </a> -->
-                                            </td>
+                                        <tr class="data-tr" data-object="<?= htmlentities(json_encode($row)) ?>" >
+                                            <td> <?= $k + 1 ?>  </td>
+                                            <td> <?= $row->jobOrderNo ?> </td>
+                                            <td> <?= $row->Customer->company ?> </td>
+                                            <td> <?= date("Y-m-d",strtotime($row->ModifiedDate)) ?> </td>
                                         </tr>
                                     <?php endforeach; ?>
                                     </tbody>

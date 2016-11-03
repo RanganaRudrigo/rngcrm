@@ -84,6 +84,8 @@ class Report extends MY_Controller
             'Technician_Wise_Reports' ,
             'Customer_Wise_Reports' ,
             'Completed_Jobs' ,
+            'Courier_In_Hand_Reports' ,
+            'Collection_Pending_Report' ,
           //  'Daily_Job_Reports' ,
             'All_Jobs' ,
         ];
@@ -271,6 +273,40 @@ class Report extends MY_Controller
         return $d;
     }
 
+    function _Courier_In_Hand_Reports(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+    /*    $this->load->model('Job_order_close_model');
+
+        $this->db->join( $this->Job_order_close_model->table() ,
+            "{$this->Job_order_close_model->table()}.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}"  )
+            ->where([
+                "PartUsedFor!=" => 2 ,
+                "{$this->Job_order_close_model->table()}.Status" => 1
+            ])->select("{$this->Joborder_model->table()}.* , {$this->Job_order_close_model->table()}.Note as complainDetails");
+*/
+
+
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")
+            ->get_many_by(["Status"=>1 ,'JobStatus'=> 3 ]);
+
+
+        $d["page"] = "$this->page/job_order";
+        return $d;
+    }
+
+    function _Collection_Pending_Report(){
+        $this->load->model("Job_pass_to_courier_model","JobPassToCourier");
+        $d['records'] = $this->Joborder_model->with("Customer")->with("JOB_TO_TECH")->with("Item")->with("Repair")->get_many_by(['JobStatus'=>4,'Status'=>1,'inHouse'=> 0 ]);
+        $d['page'] ="$this->page/job_order";
+//        p( $d['records'] );  exit;
+        return $d;
+    }
+
     function purchase_report(){
 
         $this->load->model("Item_model",'item');
@@ -297,6 +333,46 @@ class Report extends MY_Controller
         }
         $d['records'] =$this->model->with('Items')->get_many_by(['status'=> 1]) ;
 
+        $this->view($d);
+    }
+    
+    function Issuing_Parts_Report(){
+
+        $this->load->model('Technician_hand');
+
+        $records = $this->Technician_hand->with('TECH')->with('ITEM')->get_many_by(['Status'=>1]);
+
+        $d['records'] = $records;
+
+        $d["page"] = "$this->page/Issuing_Parts_Report";
+        $this->view($d);
+    } 
+
+    function Return_Parts_Report(){
+        $this->load->model('Technician_hand');
+
+        $records = $this->Technician_hand->with('TECH')->with('ITEM')->get_many_by(['Status'=>1]);
+
+        $d['records'] = $records;
+
+        $d["page"] = "$this->page/Return_Parts_Report";
+        $this->view($d);
+    }
+
+    function Replacement_Toners_Report(){
+
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("EndDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("EndDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+        $this->load->model("Job_order_close_model");
+        $d['records'] = $this->Job_order_close_model->with("Repair")->with("REPLACE_TONER")->with("JOB")
+            ->get_many_by(['JobOrderType'=>'T','JobStatus'=>2]);
+//        p($records);
+        $d['page'] ="$this->page/Replacement_Toners_Report";
+//        p( $d['records'] );  exit;
         $this->view($d);
     }
 

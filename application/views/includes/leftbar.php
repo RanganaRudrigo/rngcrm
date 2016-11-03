@@ -284,7 +284,7 @@
                             <a href="<?= base_url('report/stock_balance') ?>" class="waves-effect">
                                 <span> Stock Balance </span>  </a>
                         </li>
-                        <li  >
+                         <li  >
                             <a href="<?= base_url('report/technician_hand') ?>" class="waves-effect">
                                 <span> Technician Hand </span>  </a>
                         </li>
@@ -295,6 +295,18 @@
                         <li  >
                             <a href="<?= base_url('report/purchase_report') ?>" class="waves-effect">
                                 <span> Purchase Report </span>  </a>
+                        </li>
+                        <li  >
+                            <a href="<?= base_url('report/Issuing_Parts_Report') ?>" class="waves-effect">
+                                <span> Issuing Parts Report </span>  </a>
+                        </li>
+                        <li  >
+                            <a href="<?= base_url('report/Return_Parts_Report') ?>" class="waves-effect">
+                                <span> Return Parts Report</span>  </a>
+                        </li>
+                        <li  >
+                            <a href="<?= base_url('report/Replacement_Toners_Report') ?>" class="waves-effect">
+                                <span>Replacement Toners Report</span>  </a>
                         </li>
                     </ul>
                 </li>

@@ -51,15 +51,17 @@
                                 </div>
                             </fieldset>
 
-
+                            <?php foreach ($reports as $k => $re ): ?>
+                                <?= $k%4==0 ?  '<fieldset class="form-group col-lg-3 ">' : '' ?>
+                                <div class="radio">
+                                    <?= form_radio('jobType',$re,$this->input->get('jobType') == $re ,['id'=>$re]) ?>
+                                    <?= form_label(str_replace('_'," ",$re), '',['for'=>$re] ) ?>
+                                </div>
+                                <?= $k%4==3 || count($reports) == $k+1 ?  '</fieldset>' : '' ?>
+                            <?php endforeach; ?>
 
                             <div class="field_binder" >
-                                <fieldset id="Customer_Wise_Reports_field" class="form-group col-lg-3    extra_field ">
-                                    <label for="exampleInputEmail1"> Supplier </label>
-                                    <div>
-                                        <?= form_dropdown("Supplier",$suppliers,$this->input->get('Supplier'),"class='form-control '") ?>
-                                    </div>
-                                </fieldset>
+
                             </div>
 
 
@@ -69,6 +71,20 @@
                             </div>
                         </div>
                         <?= form_close() ?>
+
+                        <fieldset id="Customer_Wise_Reports_field" class="form-group col-lg-3  hidden extra_field ">
+                            <label for="exampleInputEmail1"> Customers </label>
+                            <div>
+                                <?= form_dropdown("Customer",$customers,$this->input->get('Customer'),"class='form-control '") ?>
+                            </div>
+                        </fieldset>
+                        <fieldset id="Technician_Wise_Reports_field" class="form-group col-lg-3  hidden extra_field ">
+                            <label for="exampleInputEmail1"> Technician </label>
+                            <div>
+                                <?= form_dropdown("Technician",$technicians,$this->input->get('Technician'),"class='form-control '") ?>
+                            </div>
+                        </fieldset>
+
                     </div>
                 </div>
 
@@ -80,26 +96,53 @@
                                 <table  id="datatable-buttons" class=" table table-striped " >
                                     <thead>
                                     <tr>
-                                        <th   > # </th>
-                                        <th  > Code </th>
-                                        <th  > Supplier  </th>
-                                        <th> Item Code </th>
+                                        <th> # </th>
+                                        <th> Complain Date </th>
+                                        <th> Job Order No </th>
+                                        <th> For </th>
+                                        <th> Customer  </th>
                                         <th> Item Name </th>
-                                        <th> Qty </th>
+                                        <th> Serial No </th>
+                                        <th> Replace Serial No </th>
+                                        <th> Repair Mode </th>
+                                        <th> Status </th>
+                                        <th> Note </th>
+
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($records as $k => $row): ?>
-                                        <?php foreach ($row->Items as $item) : ?>
+                                    <?php foreach ($records as $k => $row): if(empty($row->REPLACE_TONER->ReplaceItemSerialNo )) continue; ?>
                                         <tr>
                                             <td> <?= $k+1 ?>  </td>
-                                            <td> PUR-<?= repeater(0,5-strlen($row->PurchaseId)).$row->PurchaseId ?> </td>
-                                            <td> <?= "$row->title.$row->contact_person ( $row->company )" ?> </td>
-                                            <td> <?= $item->Item->ItemCode  ?> </td>
-                                            <td> <?=  $item->Item->ItemName ?> </td>
-                                            <td> <?= $item->Qty ?> </td>
+                                            <td> <?= $row->EndDate ?> </td>
+                                            <td> <?= $row->JOB->jobOrderNo ?> </td>
+                                            <td> <?= $row->JobOrderType == "P" ?"Printer" :"Toner" ?> </td>
+                                            <td> <?= "({$row->JOB->Customer->cus_code}){$row->JOB->Customer->company} - {$row->JOB->Customer->customerName}" ?> </td>
+                                            <td> <?= $row->JOB->Item->ItemName ?> </td>
+                                            <td> <?= $row->REPLACE_TONER->CurrentItemSerialNo ?> </td>
+                                            <td> <?= $row->REPLACE_TONER->ReplaceItemSerialNo ?> </td>
+                                            <td> <?= $row->Repair->rep_mode_name ?> </td>
+                                            <td> <?php if(!$row->inHouse ){
+                                                    if($row->JobStatus == 0)
+                                                        echo  "New Job";
+                                                    elseif($row->JobStatus == 1)
+                                                        echo " Job Pass To Technician ";
+                                                    elseif($row->JobStatus == 2)
+                                                        echo "Complete" ;
+                                                    elseif($row->JobStatus == 3 )
+                                                        echo "Courier Department ";
+                                                    else
+                                                        echo "Courier" ;
+                                                }else{
+                                                    if($row->JobStatus == 0)
+                                                        echo  "New Job";
+                                                    elseif($row->JobStatus == 1)
+                                                        echo " Job Pass To Technician ";
+                                                    elseif($row->JobStatus == 2)
+                                                        echo "Complete" ;
+                                                } ?> </td>
+                                            <td> <?= $row->Note ?> </td>
                                         </tr>
-                                        <?php endforeach; ?>
                                     <?php endforeach; ?>
                                     </tbody>
                                 </table>
@@ -177,6 +220,28 @@
                 firstDay: 1
             }
         });
+
+        $("input[type=radio]").click(function () {
+            $(".field_binder").find('.extra_field').remove();
+        });
+
+        $("#Customer_Wise_Reports").click(function () {
+                $(".field_binder").find('.extra_field').remove();
+                var cus = $("#Customer_Wise_Reports_field").clone();
+                cus.removeClass('hidden').appendTo(".field_binder");
+            })
+            <?php if( isset($_GET['Customer']) ): ?>
+            .trigger('click');
+        <?php endif; ?>;
+
+        $("#Technician_Wise_Reports").click(function () {
+                $(".field_binder").find('.extra_field').remove();
+                var cus = $("#Technician_Wise_Reports_field").clone();
+                cus.removeClass('hidden').appendTo(".field_binder");
+            })
+            <?php if( isset($_GET['Technician']) ): ?>
+            .trigger('click');
+        <?php endif; ?>;
 
     });
 
