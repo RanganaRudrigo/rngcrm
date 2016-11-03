@@ -219,7 +219,7 @@
                                     <label><input type="radio" name="form[star]" class="radio-inline" value="2" >  Ok</label>&nbsp;&nbsp;
                                     <label><input type="radio" checked name="form[star]" class="radio-inline" value="3" >  Good</label>&nbsp;&nbsp;
                                     <label><input type="radio" name="form[star]" class="radio-inline" value="4" >  Very Good</label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="form[star]" class="radio-inline" value="5" >  Best</label>
+                                    <label><input type="radio" name="form[star]" class="radio-inline" value="5" >  Excellent </label>
                                 </fieldset>
                             </div>
                         </div>
