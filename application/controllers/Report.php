@@ -376,4 +376,20 @@ class Report extends MY_Controller
         $this->view($d);
     }
 
+    function Feedback(){
+        $this->load->model("Joborder_model");
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+        
+        $d['records'] =  $this->Joborder_model
+            ->with("JOB_TO_TECH") ->with("Close")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
+        $d["page"] = "$this->page/Feedback";
+
+//        p( $d['records']);
+        $this->view($d);
+    }
+    
 }

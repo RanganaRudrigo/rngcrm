@@ -13,4 +13,10 @@ class Job_order_close_model extends MY_Model
         "JOB" => ["model"=>"Joborder_model","primary_key"=>"JobOrderId"] ,
         "Repair" => ["model"=>"Repair_mode_model","primary_key"=>"RepairModeId"]
     ];
+
+    function get($primary_value)
+    {
+        $this->order_by($this->primary_key,"Desc");
+        return $this->get_by($this->primary_key, $primary_value);
+    }
 }

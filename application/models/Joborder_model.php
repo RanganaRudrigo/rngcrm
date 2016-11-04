@@ -12,7 +12,8 @@ class Joborder_model  extends MY_Model
     var $belongs_to = [
         "Customer" => ["model"=>"Customer_model","primary_key"=>"CustomerId"],
         "Item" => ["model"=>"item_model","primary_key"=>"ItemId"],
-        "Repair" => ["model"=>"Repair_mode_model","primary_key"=>"RepairModeId"]
+        "Repair" => ["model"=>"Repair_mode_model","primary_key"=>"RepairModeId"],
+        "Close" => ["model"=>"Job_order_close_model","primary_key"=>"JobOrderId"]
     ];
     var $belongs_with = [
         "JOB_TO_TECH" => ["model"=>"Job_order_technician_model","key"=>"JobOrderId"]

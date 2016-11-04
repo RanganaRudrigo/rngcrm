@@ -308,6 +308,10 @@
                             <a href="<?= base_url('report/Replacement_Toners_Report') ?>" class="waves-effect">
                                 <span>Replacement Toners Report</span>  </a>
                         </li>
+                        <li  >
+                            <a href="<?= base_url('report/Feedback') ?>" class="waves-effect">
+                                <span>Feedback</span>  </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="has_sub">
