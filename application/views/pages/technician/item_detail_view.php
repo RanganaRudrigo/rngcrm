@@ -119,7 +119,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#datatable').DataTable();
+       $('#datatable').DataTable({             "scrollY":        "300px",             "scrollCollapse": true,             "paging":         false         }); 
         //Buttons examples
         var table = $('#datatable-buttons').DataTable({
             lengthChange: false,

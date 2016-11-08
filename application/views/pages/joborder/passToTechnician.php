@@ -141,6 +141,7 @@
 <?php $this->view('includes/footer_start.php') ?>
 <!-- extra js start -->
 <script src="<?= base_url("assets/plugins/datatables/jquery.dataTables.min.js") ?>"></script>
+
 <script src="<?= base_url("assets/plugins/datatables/dataTables.bootstrap4.min.js") ?>"></script>
 <script src="<?= base_url("js/autocomplete.min.js") ?>"></script>
 <script src="<?= base_url("assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") ?>"></script>
@@ -168,7 +169,11 @@
             autoclose: true,
             'default': 'now'
         });
-        $('#datatable').DataTable();
+        $('#datatable').DataTable({
+            "scrollY":        "300px",
+            "scrollCollapse": true,
+            "paging":         false
+        });
         $('#technician-search').autocomplete({
             'source': function (request, response) {
                 if (request.length) {
@@ -194,7 +199,8 @@
 
             }
         });
-        $(".data-tr").click(function (e) {
+        
+        $("#datatable").on('click','.data-tr',function (e) {
             var $this = $(this) , obj = $this.data('object') ;
             if(obj.JobOrderId){
                 if($("#JobOrderId").length){
@@ -210,7 +216,7 @@
             }else{
                 location.reload();
             }
-            $this.closest('table').find('tr').removeAttr('style')
+            $("#datatable").find('tr').removeAttr('style')
             $this.css({"background-color":"#6c7f8c",'color':'#fff'});
             $this.data('object')
         });

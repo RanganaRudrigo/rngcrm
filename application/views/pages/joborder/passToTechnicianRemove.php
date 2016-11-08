@@ -157,9 +157,9 @@
             autoclose: true,
             'default': 'now'
         });
-        $('#datatable').DataTable();
+       $('#datatable').DataTable({             "scrollY":        "300px",             "scrollCollapse": true,             "paging":         false         }); 
 
-        $(".data-tr").click(function (e) {
+        $("#datatable").on('click','.data-tr',function (e) {
             var $this = $(this) , obj = $this.data('object') ;
             if(obj.JobOrderId){
                 $("#JobOrderId").val(obj.JobOrderId)

@@ -150,7 +150,7 @@
 <script src="<?= base_url("js/autocomplete.min.js") ?>"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#datatable').DataTable(); 
+       $('#datatable').DataTable({             "scrollY":        "300px",             "scrollCollapse": true,             "paging":         false         });  
          $('#technician-search').autocomplete({
                 'source': function(request, response) {
                     if(request.length){

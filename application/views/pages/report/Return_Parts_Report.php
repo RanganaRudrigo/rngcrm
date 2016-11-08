@@ -103,7 +103,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#datatable').DataTable();
+       $('#datatable').DataTable({             "scrollY":        "300px",             "scrollCollapse": true,             "paging":         false         }); 
         $(".button-menu-mobile").click();
         //Buttons examples
         var table = $('#datatable-buttons').DataTable({

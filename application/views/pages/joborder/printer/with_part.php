@@ -346,7 +346,7 @@
             if(!$("#JobOrderId").length) alert("Please Select the job order");
             return $("#JobOrderId").length ? true : false   ;
         });
-        $('#datatable').DataTable();
+       $('#datatable').DataTable({             "scrollY":        "300px",             "scrollCollapse": true,             "paging":         false         }); 
         DatePickerEnable();
         $('.timepicker').clockpicker({
             placement: 'bottom',
@@ -355,7 +355,7 @@
             'default': 'now'
         });
 
-        $(".data-tr").click(function (e) {
+        $("#datatable").on('click','.data-tr',function (e) {
             var $this = $(this) , obj = $this.data('object') ;
             if(obj.JobOrderId){
                 console.log(obj);

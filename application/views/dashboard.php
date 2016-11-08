@@ -179,7 +179,7 @@
 <script src="<?= base_url("assets/plugins/datatables/dataTables.bootstrap4.min.js") ?>"></script>
 <script>
     $(function () {
-        $('#datatable').DataTable();
+       $('#datatable').DataTable({             "scrollY":        "300px",             "scrollCollapse": true,             "paging":         false         }); 
         $('#datatable1').DataTable();
         $('#datatable2').DataTable();
     })
