@@ -18,7 +18,7 @@ class Migration_Job_order_approved extends CI_Migration
                 'default' => 0
             ]
         ];
-      //  $this->dbforge->add_column('job_order_close_quotation', $fields);
+        $this->dbforge->add_column('job_order_close_quotation', $fields);
     }
 
     public function down(){
