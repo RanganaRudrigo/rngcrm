@@ -90,7 +90,7 @@ if( @end(explode('.',$_SERVER['SERVER_NAME'])) == 'dev'){
 	define('HOST', 'localhost');
 	define('DB', 'rngsys');
 	define('USERNAME', 'root');
-	define('PASSWORD', '');
+	define('PASSWORD', 'mart1234');
 }
 else{
 	

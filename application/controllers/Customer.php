@@ -91,28 +91,32 @@ class Customer extends MY_Controller
 
             $this->db->trans_start();
             $CustomerItemId = $this->CustomerItemMaster->insert($data);
-
+            $serialNoList= [];
+            //p($this->input->post());
             foreach ($this->input->post('item[id]') as $key => $itemId ){
                 $d['CustomerItemId'] = $CustomerItemId;
                 $d['ItemId'] = $itemId;
                 $d['Qty'] = $this->input->post("item[qty][$key]");
                 $d['Property'] = $this->input->post("item[property][$key]");
                 $CustomerItemDetailId =  $this->CustomerItemDetail->insert($d);
+                //p($this->db->last_query());
                 foreach ($this->input->post("item[serial_list][$key]")  as  $serialNo ){
                     $serialNoList[] = [
                         'SerialNo' => $serialNo ,
                         'CustomerItemId' => $CustomerItemDetailId
                     ];
                 }
-
+                p($serialNoList);
             }
             $this->db->insert_batch($this->CustomerSerialNo->table(),$serialNoList);
+            //p($this->db->last_query());
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
                 $this->session->set_flashdata('notification', ["alert"=>"danger","text"=>'<strong> Customer Item Load Failure Please Try Again </strong>']);
             }
             else  {
                 $this->session->set_flashdata('notification', ["alert"=>"success","text"=>'<strong>Customer Item Successfully loaded </strong>']);
+                $this->db->trans_rollback();
                 $this->db->trans_commit();
             }
 
