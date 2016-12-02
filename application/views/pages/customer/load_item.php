@@ -204,79 +204,79 @@ $(function () {
 		}
 	});
 	$('body')
-	.on('click','#qty_button',function (e) {
-		e.preventDefault();
-		e.stopPropagation();
-		qty = $('#qty_input').val();
-		loadItemList++ ;
-		$('#product-search').val("");
-		ajaxModel.hide(); 
-		AjaxLoader.show();
-		var serial_template = $("#serial_list").clone() , table = serial_template.find('table');
-		serial_template.find('.btn-primary').attr('id','serial_submit'); 
-		table.find('tbody').empty().html();
-		for(var i=0;i < qty;i++){ 
-			$("<tr>").append(
-				"<td>" + (i+1) + "</td>"+
-				"<td> <input type='text' class='form-control serial_no_checker' name='item[serial_list]["+ loadItemList   +"][]' > </td>"
-			).appendTo(table.find('tbody'));
-		}
-		App.SerialNoChecker();
-		 AjaxLoader.hide();			
-		ajaxModel.show( 'Serial No(s)', serial_template.html() , {dialogSize: 'sm' });
-		$("body").find("#ajaxModel").css("padding-top","0");
-		
-	})
-	.on('click','#serial_submit',function (e) {
-		e.stopPropagation();
-		var f = true ,data = [] , self = $(this);
-		$("#item-table-tr").find(".serialList").each(function (k,v) {
-			data.push($(v).val());
-		});
-		$(this).closest('.modal').find('input[type=text]').each(function(k,v){
-			if($(v).val().length < 1 || $.inArray($(v).val(),data) !== -1  ){
-				f = false ;
-				$(v).addClass('form-control-danger').closest('td').addClass('has-danger');
-			}else{
-				data.push($(v).val());
-				$(v).removeClass('form-control-danger').closest('td').removeClass('has-danger');
-			}
-		});
-		if(f){
-			AjaxLoader.show();
-			$("<tr>").data('id',loadItemList ).append(
-				"<td>" + (loadItemList ) + "</td>"+
-				"<td>" +  item[0]+ "</td>"+
-				"<td>" +  item[1]+ "</td>"+
-				"<td>" +  qty+ "</td>" +
-				"<td> "+
-				" <input type='hidden'  name='item[id][" + loadItemList   + "]' value='"+ obj[0] +"' /> " +
-				" <input type='hidden'  name='item[qty][" + loadItemList   + "]' value='"+ qty +"' /> " +
-				"<select class='form-control' name='item[property][" + loadItemList   + "]'  > <option value='1' >RNG</option> <option value='2'  >Customer Property</option>  </select> </td>"+
-				"<td> <a data-remove='tr' class='fa fa-times btn btn-danger btn-remove' >  </a>  </td>"
-			).appendTo("#item-table-tr");
-			self.closest('.modal').find('input[type=text]').each(function(k,v){
-				$("#item-table-tr").find('tr').eq(loadItemList-1).find('td').eq(0).append($(v).attr({type:"hidden",class:"serialList"}));
-				$("#item-table-tr").find('tr').eq(loadItemList-1).find('td').eq(3).append( (k == 0 ? "<br/>":" , ") + $(v).val());
-			});
-			ajaxModel.hide();
-			AjaxLoader.hide();
-		}
-	})
-	.on("submit","form",function (e) {
-		var f=true;
-		if( !$('#CustomerId').val().length ){
-			$('#customer-search').addClass('form-control-danger').val("").closest('.input-group').addClass('has-danger');
-			f = false ;
-		}else if(!$("#item-table-tr").find('tr').length){
-			$('#product-search').addClass('form-control-danger').val("").closest('.input-group').addClass('has-danger');
-			f = false ;
-		}
-		if(!f){
+		.on('click','#qty_button',function (e) {
 			e.preventDefault();
-			return false ;
-		}
-	})
+			e.stopPropagation();
+			qty = $('#qty_input').val();
+			loadItemList++ ;
+			$('#product-search').val("");
+			ajaxModel.hide();
+			AjaxLoader.show();
+			var serial_template = $("#serial_list").clone() , table = serial_template.find('table');
+			serial_template.find('.btn-primary').attr('id','serial_submit');
+			table.find('tbody').empty().html();
+			for(var i=0;i < qty;i++){
+				$("<tr>").append(
+					"<td>" + (i+1) + "</td>"+
+					"<td> <input type='text' class='form-control serial_no_checker' name='item[serial_list]["+ loadItemList   +"][]' > </td>"
+				).appendTo(table.find('tbody'));
+			}
+			App.SerialNoChecker();
+			 AjaxLoader.hide();
+			ajaxModel.show( 'Serial No(s)', serial_template.html() , {dialogSize: 'sm' });
+			$("body").find("#ajaxModel").css("padding-top","0");
+
+		})
+		.on('click','#serial_submit',function (e) {
+			e.stopPropagation();
+			var f = true ,data = [] , self = $(this);
+			$("#item-table-tr").find(".serialList").each(function (k,v) {
+				data.push($(v).val());
+			});
+			$(this).closest('.modal').find('input[type=text]').each(function(k,v){
+				if($(v).val().length < 1 || $.inArray($(v).val(),data) !== -1  ){
+					f = false ;
+					$(v).addClass('form-control-danger').closest('td').addClass('has-danger');
+				}else{
+					data.push($(v).val());
+					$(v).removeClass('form-control-danger').closest('td').removeClass('has-danger');
+				}
+			});
+			if(f){
+				AjaxLoader.show();
+				$("<tr>").data('id',loadItemList ).append(
+					"<td>" + (loadItemList ) + "</td>"+
+					"<td>" +  item[0]+ "</td>"+
+					"<td>" +  item[1]+ "</td>"+
+					"<td>" +  qty+ "</td>" +
+					"<td> "+
+					" <input type='hidden'  name='item[id][" + loadItemList   + "]' value='"+ obj[0] +"' /> " +
+					" <input type='hidden'  name='item[qty][" + loadItemList   + "]' value='"+ qty +"' /> " +
+					"<select class='form-control' name='item[property][" + loadItemList   + "]'  > <option value='1' >RNG</option> <option value='2'  >Customer Property</option>  </select> </td>"+
+					"<td> <a data-remove='tr' class='fa fa-times btn btn-danger btn-remove' >  </a>  </td>"
+				).appendTo("#item-table-tr");
+				self.closest('.modal').find('input[type=text]').each(function(k,v){
+					$("#item-table-tr").find('tr').eq(loadItemList-1).find('td').eq(0).append($(v).attr({type:"hidden",class:"serialList"}));
+					$("#item-table-tr").find('tr').eq(loadItemList-1).find('td').eq(3).append( (k == 0 ? "<br/>":" , ") + $(v).val());
+				});
+				ajaxModel.hide();
+				AjaxLoader.hide();
+			}
+		})
+		.on("submit","form",function (e) {
+			var f=true;
+			if( !$('#CustomerId').val().length ){
+				$('#customer-search').addClass('form-control-danger').val("").closest('.input-group').addClass('has-danger');
+				f = false ;
+			}else if(!$("#item-table-tr").find('tr').length){
+				$('#product-search').addClass('form-control-danger').val("").closest('.input-group').addClass('has-danger');
+				f = false ;
+			}
+			if(!f){
+				e.preventDefault();
+				return false ;
+			}
+		})
 		.on('click','.btn-remove',function (e) {
 			e.preventDefault();
 			e.stopPropagation();
