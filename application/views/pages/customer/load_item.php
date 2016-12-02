@@ -281,6 +281,7 @@ $(function () {
 			e.preventDefault();
 			e.stopPropagation();
 			loadItemList--;
+			
 		});
 })
 
