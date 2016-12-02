@@ -190,7 +190,7 @@ class Joborder  extends MY_Controller {
             $this->load->model("Job_order_close_model","JobClose");
             $JobCloseId = $this->JobClose->insert($this->input->post('form'));
             $jobOrderNo = $this->model->fields("jobOrderNo")->get($this->input->post('form[JobOrderId]'))->jobOrderNo;
-            $filePath = "./Job/".$jobOrderNo;
+            $filePath =  FCPATH. "/Job/$jobOrderNo/";
             mkdir($filePath);
             if(is_dir($filePath)){
                 $config['upload_path'] =  "$filePath/";
@@ -201,7 +201,7 @@ class Joborder  extends MY_Controller {
                 $this->file_upload("jobSheet","jobSheet");
                 $this->file_upload("BeforeJob","BeforeJob");
                 $this->file_upload("AfterJob","AfterJob");
-            }
+            } 
 
             $this->model->update($this->input->post("form[JobOrderId]"),["JobStatus"=>2]);
 
@@ -302,6 +302,7 @@ class Joborder  extends MY_Controller {
             $jobOrderNo = $this->model->fields("jobOrderNo")->get($this->input->post('form[JobOrderId]'))->jobOrderNo;
             $filePath = "./Job/".$jobOrderNo;
             mkdir($filePath);
+
             if(is_dir($filePath)){
                 $config['upload_path'] =  "$filePath/";
                 $config['allowed_types'] = 'jpg|jpeg|png|gif';

@@ -91,16 +91,18 @@ if( @end(explode('.',$_SERVER['SERVER_NAME'])) == 'dev'){
 	define('DB', 'rngsys');
 	define('USERNAME', 'root');
 	define('PASSWORD', 'mart1234');
+	define('DOMAIN', "http://{$_SERVER['SERVER_NAME']}");
 }
 else{
 	
 	define('HOST', 'localhost');
-	define('DB', 'rng_system_db');
-	define('USERNAME', 'rng_system_user');
-	define('PASSWORD', 'n*+igug[Tv0w'); 
+	define('DB', 'rngsys');
+	define('USERNAME', 'root');
+	define('PASSWORD', '');
+	define('DOMAIN', "http://{$_SERVER['SERVER_NAME']}/rngcrm");
 }
 
-define('DOMAIN', "http://{$_SERVER['SERVER_NAME']}");
+
     
 
 
