@@ -229,7 +229,7 @@ $(function () {
 	})
 	.on('click','#serial_submit',function (e) {
 		e.stopPropagation();
-		var f = true ,data = [];
+		var f = true ,data = [] , self = $(this);
 		$("#item-table-tr").find(".serialList").each(function (k,v) {
 			data.push($(v).val());
 		});
@@ -244,7 +244,6 @@ $(function () {
 		});
 		if(f){
 			AjaxLoader.show();
-			ajaxModel.hide();
 			$("<tr>").data('id',loadItemList ).append(
 				"<td>" + (loadItemList ) + "</td>"+
 				"<td>" +  item[0]+ "</td>"+
@@ -256,10 +255,11 @@ $(function () {
 				"<select class='form-control' name='item[property][" + loadItemList   + "]'  > <option value='1' >RNG</option> <option value='2'  >Customer Property</option>  </select> </td>"+
 				"<td> <a data-remove='tr' class='fa fa-times btn btn-danger btn-remove' >  </a>  </td>"
 			).appendTo("#item-table-tr");
-			$(this).closest('.modal').find('input[type=text]').each(function(k,v){
+			self.closest('.modal').find('input[type=text]').each(function(k,v){
 				$("#item-table-tr").find('tr').eq(loadItemList-1).find('td').eq(0).append($(v).attr({type:"hidden",class:"serialList"}));
 				$("#item-table-tr").find('tr').eq(loadItemList-1).find('td').eq(3).append( (k == 0 ? "<br/>":" , ") + $(v).val());
 			});
+			ajaxModel.hide();
 			AjaxLoader.hide();
 		}
 	})
@@ -276,7 +276,12 @@ $(function () {
 			e.preventDefault();
 			return false ;
 		}
-	});
+	})
+		.on('click','.btn-remove',function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			loadItemList--;
+		});
 })
 
 

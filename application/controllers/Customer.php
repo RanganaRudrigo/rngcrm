@@ -105,8 +105,7 @@ class Customer extends MY_Controller
                         'SerialNo' => $serialNo ,
                         'CustomerItemId' => $CustomerItemDetailId
                     ];
-                }
-                p($serialNoList);
+                } 
             }
             $this->db->insert_batch($this->CustomerSerialNo->table(),$serialNoList);
             //p($this->db->last_query());
