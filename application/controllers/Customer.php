@@ -115,7 +115,7 @@ class Customer extends MY_Controller
             }
             else  {
                 $this->session->set_flashdata('notification', ["alert"=>"success","text"=>'<strong>Customer Item Successfully loaded </strong>']);
-                $this->db->trans_rollback();
+               // $this->db->trans_rollback();
                 $this->db->trans_commit();
             }
 
@@ -141,7 +141,7 @@ class Customer extends MY_Controller
             $this->load->model('Customer_item_master','CustomerItemMaster');
 
             $this->db->join($this->customer->table(),"{$this->customer->table()}.{$this->customer->getPrimaryKey()} = {$this->CustomerItemMaster->table()}.CustomerId");
-			$this->db->group_by("{$this->customer->table()}.CustomerId");
+//			$this->db->group_by("{$this->customer->table()}.CustomerId");
             $d['CustomerItem'] = $this->CustomerItemMaster->get_many_by(["Status"=>1]);
 
             $d['page'] = "$this->_page/load_item_manage";
