@@ -256,7 +256,7 @@ $(function () {
 					"<td> <a data-remove='tr' class='fa fa-times btn btn-danger btn-remove' >  </a>  </td>"
 				).appendTo("#item-table-tr");
 				self.closest('.modal').find('input[type=text]').each(function(k,v){
-					$("#item-table-tr").find('tr').eq(loadItemList-1).find('td').eq(0).append($(v).attr({type:"hidden",class:"serialList"}));
+					$("#item-table-tr").find('tr').eq(loadItemList-1).find('td').eq(0).append($(v).attr({type:"hidden",class:"serialList",value: $(v).val() }));
 					$("#item-table-tr").find('tr').eq(loadItemList-1).find('td').eq(3).append( (k == 0 ? "<br/>":" , ") + $(v).val());
 				});
 				ajaxModel.hide();
