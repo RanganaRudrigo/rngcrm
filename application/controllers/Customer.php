@@ -118,7 +118,6 @@ class Customer extends MY_Controller
                // $this->db->trans_rollback();
                 $this->db->trans_commit();
             }
-
             redirect(current_url());
         }
         $d['page'] = "$this->_page/load_item";
@@ -131,10 +130,8 @@ class Customer extends MY_Controller
             $this->item_load_delete($id);
             redirect(base_url("Customer/item_load_manage"));
         }
-
         if($view== "view"){
             $this->item_load_view($id);
-
         }else{
             $this->check_permission(get_class(),"view");
             $this->load->model('Customer_model','customer');
@@ -146,10 +143,7 @@ class Customer extends MY_Controller
 
             $d['page'] = "$this->_page/load_item_manage";
             $this->view($d);
-
         }
-
-
     }
 
     function item_load_view($id){
@@ -174,6 +168,13 @@ class Customer extends MY_Controller
         $this->check_permission("Customer Item","delete");
         $this->load->model('Customer_item_master','CustomerItemMaster');
         $this->CustomerItemMaster->update($id,['Status'=>0]);
+
+        $this->db->query("update customer_item_serial_no 
+join customer_item on 
+customer_item.CustomerItemDetailId = customer_item_serial_no.CustomerItemId
+set customer_item_serial_no.SerialNo = concat(customer_item_serial_no.SerialNo, '-$id') 
+ where customer_item.CustomerItemId = $id ");
+
     }
 
 }
