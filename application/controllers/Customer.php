@@ -92,6 +92,7 @@ class Customer extends MY_Controller
             $this->db->trans_start();
             $CustomerItemId = $this->CustomerItemMaster->insert($data);
             $serialNoList= [];
+            $serialNoList_x= [];
             //p($this->input->post());
             foreach ($this->input->post('item[id]') as $key => $itemId ){
                 $d['CustomerItemId'] = $CustomerItemId;
@@ -101,13 +102,18 @@ class Customer extends MY_Controller
                 $CustomerItemDetailId =  $this->CustomerItemDetail->insert($d);
                 //p($this->db->last_query());
                 foreach ($this->input->post("item[serial_list][$key]")  as  $serialNo ){
-                    $serialNoList[] = [
-                        'SerialNo' => $serialNo ,
-                        'CustomerItemId' => $CustomerItemDetailId
-                    ];
+                    if(!empty($serialNo) && !in_array($serialNo,$serialNoList_x) ) {
+                        $serialNoList_x[] = $serialNo ;
+                        $serialNoList[] = [
+                            'SerialNo' => $serialNo ,
+                            'CustomerItemId' => $CustomerItemDetailId
+                        ];
+                    }
+
                 } 
             }
-            $this->db->insert_batch($this->CustomerSerialNo->table(),$serialNoList);
+            if(!empty($serialNoList))
+                $this->db->insert_batch($this->CustomerSerialNo->table(),$serialNoList);
             //p($this->db->last_query());
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();

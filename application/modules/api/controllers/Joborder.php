@@ -39,7 +39,7 @@ class Joborder extends REST_Controller
 
 
         $this->db->from($CustomerSerialNoTable )
-        ->join($CustomerItemTable , "$CustomerSerialNoTable.CustomerItemId = $CustomerItemTable.CustomerItemId" )
+        ->join($CustomerItemTable , "$CustomerSerialNoTable.CustomerItemId = $CustomerItemTable.CustomerItemDetailId" )
         ->join($CustomerItemMaster , "$CustomerItemMaster.CustomerItemId = $CustomerItemTable.CustomerItemId" )
         ->join($CustomerTable , "$CustomerTable.CustomerId = $CustomerItemMaster.CustomerId" )
         ->join($ItemTable , "$ItemTable.ItemId = $CustomerItemTable.ItemId" )
