@@ -175,3 +175,10 @@
 <script src="<?= base_url('assets/js/jquery.core.js')?>"></script>
 <script src="<?= base_url('assets/js/jquery.app.js')?>"></script>
 <script src="<?= base_url('js/common.js')?>"></script>
+<script>
+    var ua = window.navigator.userAgent;
+    if(ua.indexOf("Chrome") < 1 ){
+        window.location.href= '<?= base_url('invalid_browser') ?>';
+    }
+
+</script>

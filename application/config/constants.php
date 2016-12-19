@@ -98,7 +98,7 @@ else{
 	define('HOST', 'localhost');
 	define('DB', 'rngsys');
 	define('USERNAME', 'root');
-	define('PASSWORD', '');
+	define('PASSWORD', 'mart1234');
 	define('DOMAIN', "http://{$_SERVER['SERVER_NAME']}/rngcrm");
 }
 

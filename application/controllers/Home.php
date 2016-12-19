@@ -39,6 +39,12 @@ class Home extends CI_Controller
         }
     }
 
+    function invalid_browser(){
+        echo " <center> <h2> PLEASE USE CHROME  </h2> 
+            <a href='https://www.google.com/chrome/browser/desktop/' > Download  </a>
+ </center> ";
+    }
+
 
     function dashboard(){
         $d['technicianHandPrinter'] = $this->_technician_hand_printer_job();

@@ -65,3 +65,10 @@
 
 
 <?php  $this->view('includes/footer_account.php'); ?>
+<script>
+    var ua = window.navigator.userAgent; 
+   if(ua.indexOf("Chrome") < 1 ){
+       window.location.href= '<?= base_url('invalid_browser') ?>';
+   }
+
+</script>
