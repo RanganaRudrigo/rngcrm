@@ -100,7 +100,7 @@
                                                 ?>
                                             </td>
                                             <td>
-                                                <a class="btn btn-warning remove_item " data-item-id="<?= $row->ITEM->ItemId ?>" data-qty="<?= $row->Qty ?>" data-serial="<?= htmlentities(json_encode($s)) ?>" data-damage-serial="<?= htmlentities(json_encode($d)) ?>"      > Return </a>
+                                                <a class="btn btn-warning remove_item " data-item-id="<?= $row->ITEM->ItemId ?>" data-item-has-serial-no="<?= $row->ITEM->has_serial ?>" data-qty="<?= $row->Qty ?>" data-serial="<?= htmlentities(json_encode($s)) ?>" data-damage-serial="<?= htmlentities(json_encode($d)) ?>"      > Return </a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -141,14 +141,17 @@
     <div class="clearfix"></div>
 </div>
 <div id="item_qty" class="hidden">
+    <form method="post" >
+        <?= form_hidden("TechnicianId",$technician->TechnicianId) ?>
     <table class="table table-bordered">
         <tbody><tr>
             <th> Qty </th>
-            <td> <input type="number" value="" class="number-only form-control">  </td>
+            <td> <input type="number" value="" name="qty" class="number-only form-control">  </td>
         </tr>
         </tbody></table>
     <button class="btn btn-primary pull-right m_b_10 "> OK </button>
-    <button class="btn btn-danger pull-right m_b_10 m_r_10 close_model"> Cancel </button>
+    <button type="reset" class="btn btn-danger pull-right m_b_10 m_r_10 close_model"> Cancel </button>
+    </form>
     <div class="clearfix"></div>
 
 </div>
@@ -158,43 +161,57 @@
            e.preventDefault();
            var $this = $(this);
 
-           var serialNo = $this.data('serial') ;
-           var damageSerial = $this.data('damageSerial') ;
-           var serial_template = $("#serial_list").clone() ,table = serial_template.find('table');
-           serial_template.find("form").append($("<input>").attr({
-               type :"hidden",
-               name : "ItemId",
-               value : $this.data("itemId")
-           }));
-           serial_template.find("form").append($("<input>").attr({
-               type :"hidden",
-               name : "qty",
-               value : $this.data("qty")
-           }));
-           serial_template.find("form").append($("<input>").attr({
-               type :"hidden",
-               name : "damageQty",
-               value : damageSerial.length
-           }));
-           for(var i in serialNo ){
-               $("<tr>").append(
-                   "<td> <label> " +
-                   serialNo[i]  +
-                   "  <input type='checkbox'   name='serial_list[]' value='"+serialNo[i]+"' >  "+
-                   "</label>" +
-                   " </td>"
-               ).appendTo(table.find('tbody'));
+           var hasSerialNo = $this.data('itemHasSerialNo');
+           if(hasSerialNo){
+               var serialNo = $this.data('serial') ;
+               var damageSerial = $this.data('damageSerial') ;
+               var serial_template = $("#serial_list").clone() ,table = serial_template.find('table');
+               serial_template.find("form").append($("<input>").attr({
+                   type :"hidden",
+                   name : "ItemId",
+                   value : $this.data("itemId")
+               }));
+               serial_template.find("form").append($("<input>").attr({
+                   type :"hidden",
+                   name : "qty",
+                   value : $this.data("qty")
+               }));
+               serial_template.find("form").append($("<input>").attr({
+                   type :"hidden",
+                   name : "damageQty",
+                   value : damageSerial.length
+               }));
+               for(var i in serialNo ){
+                   $("<tr>").append(
+                       "<td> <label> " +
+                       serialNo[i]  +
+                       "  <input type='checkbox'   name='serial_list[]' value='"+serialNo[i]+"' >  "+
+                       "</label>" +
+                       " </td>"
+                   ).appendTo(table.find('tbody'));
+               }
+               for(var i in damageSerial ){
+                   $("<tr>").append(
+                       "<td> <label> " +
+                       damageSerial[i]  +
+                       "  <input type='checkbox'   name='damageSerial[]' value='"+damageSerial[i]+"' >  "+
+                       "</label>" +
+                       " </td>"
+                   ).appendTo(table.find('tbody'));
+               }
+               ajaxModel.show( 'Serial No(s)', serial_template.html() , {dialogSize: 'sm' });
+           }else{
+               var qty_template = $("#item_qty").clone();
+               qty_template.find("form").append($("<input>").attr({
+                   type :"hidden",
+                   name : "ItemId",
+                   value : $this.data("itemId")
+               }));
+               qty_template.find('input[type=number]').attr('max',$this.data('qty') );
+               ajaxModel.show( 'Quantity', qty_template.html() , {dialogSize: 'sm' });
+
            }
-           for(var i in damageSerial ){
-               $("<tr>").append(
-                   "<td> <label> " +
-                   damageSerial[i]  +
-                   "  <input type='checkbox'   name='damageSerial[]' value='"+damageSerial[i]+"' >  "+
-                   "</label>" +
-                   " </td>"
-               ).appendTo(table.find('tbody'));
-           }
-           ajaxModel.show( 'Serial No(s)', serial_template.html() , {dialogSize: 'sm' });
+
 
        });
     });
