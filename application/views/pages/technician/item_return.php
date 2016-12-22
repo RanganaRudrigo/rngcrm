@@ -209,10 +209,7 @@
                }));
                qty_template.find('input[type=number]').attr('max',$this.data('qty') );
                ajaxModel.show( 'Quantity', qty_template.html() , {dialogSize: 'sm' });
-
            }
-
-
        });
     });
 </script>
