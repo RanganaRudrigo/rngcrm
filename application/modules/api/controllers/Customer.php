@@ -47,7 +47,7 @@ class Customer extends REST_Controller
 
 
         $this->db->from($CustomerSerialNoTable )
-            ->join($CustomerItemTable , "$CustomerSerialNoTable.CustomerItemId = $CustomerItemTable.CustomerItemId" )
+            ->join($CustomerItemTable , "$CustomerSerialNoTable.CustomerItemId = $CustomerItemTable.CustomerItemDetailId" )
             ->join($CustomerItemMaster , "$CustomerItemMaster.CustomerItemId = $CustomerItemTable.CustomerItemId" )
             ->join($CustomerTable , "$CustomerTable.CustomerId = $CustomerItemMaster.CustomerId" )
             ->join($ItemTable , "$ItemTable.ItemId = $CustomerItemTable.ItemId" )
@@ -60,17 +60,13 @@ class Customer extends REST_Controller
             ]);
 
         $this->db->group_start()
-            ->like('cus_code', $this->get('str'))
-            ->or_like('customerName', $this->get('str'))
-            ->or_like('company', $this->get('str'))
-            ->or_like('ItemCode', $this->get('str'))
+            ->like('ItemCode', $this->get('str'))
             ->or_like('ItemName', $this->get('str'))
             ->or_like('SerialNo', $this->get('str'))
             ->group_end();
 
         $this->db->group_by("$CustomerSerialNoTable.SerialNo");
         $this->db->select("$CustomerSerialNoTable.SerialNo,cus_code,customerName,$CustomerTable.AreaCode,company,$CustomerTable.CustomerId,$ItemTable.ItemId,ItemCode,ItemName");
-
 
         $this->response($this->db->get()->result());
 
