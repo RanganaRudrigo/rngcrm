@@ -12,7 +12,7 @@
     <title><?= TITLE ?> </title>
 
 
-    <!-- Google Font css -->
+    <!-- Google Font css --> 
     <link href="<?=base_url('assets/css/font.css')?>" rel="stylesheet" />
     <!-- Switchery css -->
     <link href="<?=base_url('assets/plugins/switchery/switchery.min.css')?>" rel="stylesheet" />
