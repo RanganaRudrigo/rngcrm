@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="d38cfde0-01ea-4b20-964c-5a863e52ce9d" name="alicpanl" url="http://aliphdeenhome.com">
+        <fileTransfer host="aliphdeenhome.com" port="21" password="dfc7df87dfc1df8fdf89dffadf99df83df83dfc3dfe0dfc3" username="gowtham@aliphdeenhome.com">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
