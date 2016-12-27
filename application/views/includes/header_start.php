@@ -13,7 +13,7 @@
 
 
     <!-- Google Font css --> 
-    <link href="<?=base_url('assets/css/font.css')?>" rel="stylesheet" />
+    <link href="<?=base_url('assets/css/googlefont.css')?>" rel="stylesheet" />
     <!-- Switchery css -->
     <link href="<?=base_url('assets/plugins/switchery/switchery.min.css')?>" rel="stylesheet" />
     <script type="text/javascript" > 
