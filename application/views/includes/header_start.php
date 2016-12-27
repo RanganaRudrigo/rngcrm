@@ -12,8 +12,9 @@
     <title><?= TITLE ?> </title>
 
 
-    <!-- Switchery css -->
+    <!-- Google Font css -->
     <link href="<?=base_url('assets/css/font.css')?>" rel="stylesheet" />
+    <!-- Switchery css -->
     <link href="<?=base_url('assets/plugins/switchery/switchery.min.css')?>" rel="stylesheet" />
     <script type="text/javascript" > 
         var BaseUrl = "<?=base_url()?>";
