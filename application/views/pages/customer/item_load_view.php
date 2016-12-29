@@ -135,17 +135,22 @@
         });
         function deleteRequest(self) {
             var reason = prompt("Reason for removing this item ???");
-            if (reason != null) {
-                self = $(self);
-               $.ajax({
-                   url: "<?= current_url() ?>/remove",
-                   data : { reason : reason , serialNo : self.data('serial') },
-                   success: function (result) {
-                        if(result){
-                            self.closest('tr').remove();
+            if (reason != null  ) {
+                if(reason.length > 0 ){
+                    self = $(self);
+                    $.ajax({
+                        url: "<?= current_url() ?>/remove",
+                        data : { reason : reason , serialNo : self.data('serial') },
+                        success: function (result) {
+                            if(result){
+                                self.closest('tr').remove();
+                            }
                         }
-                   }
-               });
+                    });
+                }else{
+                    alert('You must enter reason to delete a record ');
+                }
+
             }
         }
     </script>
