@@ -1,10 +1,12 @@
 <?php $this->view('includes/header_start.php'); ?>
 <!-- extra css start -->
-<link href="<?= base_url("assets/plugins/datatables/dataTables.bootstrap4.min.css") ?>" rel="stylesheet" type="text/css" />
-<link href="<?= base_url("assets/plugins/datatables/buttons.bootstrap4.min.css") ?>" rel="stylesheet" type="text/css" />
-<link href="<?= base_url("assets/plugins/datatables/responsive.bootstrap4.min.css") ?>" rel="stylesheet" type="text/css" />
+<link href="<?= base_url("assets/plugins/datatables/dataTables.bootstrap4.min.css") ?>" rel="stylesheet"
+      type="text/css"/>
+<link href="<?= base_url("assets/plugins/datatables/buttons.bootstrap4.min.css") ?>" rel="stylesheet" type="text/css"/>
+<link href="<?= base_url("assets/plugins/datatables/responsive.bootstrap4.min.css") ?>" rel="stylesheet"
+      type="text/css"/>
 <!-- extra css end -->
-<?php $this->view( 'includes/header_end.php'); ?>
+<?php $this->view('includes/header_end.php'); ?>
 
 <!-- ============================================================== -->
 <!-- Start right Content here -->
@@ -36,33 +38,37 @@
 
             <div class="row">
                 <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a class="btn btn-info m_b_10 pull-left fa fa-plus "
+                               href="<?= current_url() . "/create" ?>"> Create New </a>
+                        </div>
+                    </div>
                     <div class="card-box">
                         <h4 class="header-title m-t-0 m-b-30">Customer Details</h4>
 
                         <div class="row">
                             <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
-                                <table id="datatable" class=" table table-striped " >
+                                <table id="datatable" class=" table table-striped ">
                                     <thead>
                                     <tr>
-                                        <th> # </th>
-                                        <th> Loaded Date </th>
-                                        <th> Code </th>
-                                        <th> Name </th>
-                                        <th> Company Name </th>
-                                        <th> Action </th>
+                                        <th> #</th>
+                                        <th> Code</th>
+                                        <th> Name</th>
+                                        <th> Company Name</th>
+                                        <th> Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php foreach ($CustomerItem as $k => $row): ?>
                                         <tr>
-                                            <td> <?= $k+1 ?>  </td>
-                                            <td> <?= date("Y-m-d",strtotime($row->CreatedDate)) ?> </td>
+                                            <td> <?= $k + 1 ?>  </td>
                                             <td> <?= $row->cus_code ?> </td>
-                                            <td><?= $row->customerName  ?> </td>
+                                            <td><?= $row->customerName ?> </td>
                                             <td> <?= $row->company ?> </td>
-                                            <td class="text-center" >
-                                                <a href="<?= current_url()."/view/$row->CustomerItemId" ?>" target="_blank" class="btn btn-warning fa fa-edit " > View </a>
-                                                <a href="<?= current_url()."/delete/$row->CustomerItemId" ?>" class="btn btn-danger fa fa-times delete-btn " > Delete </a>
+                                            <td class="text-center">
+                                                <a href="<?= current_url() . "/customer_item/$row->CustomerId" ?>"
+                                                    class="btn btn-warning fa fa-edit "> View </a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -82,7 +88,7 @@
 <!-- End Right content here -->
 <!-- ============================================================== -->
 
-<?php $this->view( 'includes/footer_start.php') ?>
+<?php $this->view('includes/footer_start.php') ?>
 <!-- extra js start -->
 <!-- Required datatable js -->
 <script src="<?= base_url("assets/plugins/datatables/jquery.dataTables.min.js") ?>"></script>
@@ -97,11 +103,11 @@
 <script src="<?= base_url("assets/plugins/datatables/buttons.print.min.js") ?>"></script>
 <script src="<?= base_url("assets/plugins/datatables/buttons.colVis.min.js") ?>"></script>
 <!-- extra js end -->
-<?php $this->view( 'includes/footer_end.php') ?>
+<?php $this->view('includes/footer_end.php') ?>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-       $('#datatable').DataTable({             "scrollY":        "300px",             "scrollCollapse": true,             "paging":         false         }); 
+    $(document).ready(function () {
+        $('#datatable').DataTable({"scrollY": "300px", "scrollCollapse": true, "paging": false});
         //Buttons examples
         var table = $('#datatable-buttons').DataTable({
             lengthChange: false,

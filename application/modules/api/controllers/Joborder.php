@@ -47,7 +47,8 @@ class Joborder extends REST_Controller
         ->where([
             "$CustomerItemMaster.Status" => 1 ,
             "$CustomerTable.Status" => 1 ,
-            "$ItemTable.Status" => 1 
+            "$ItemTable.Status" => 1         ,
+            "$CustomerSerialNoTable.isDeleted" =>0 
             ]);
 
          $this->db->group_start()

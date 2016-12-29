@@ -130,26 +130,63 @@ class Customer extends MY_Controller
         $this->view($d);
     }
 
-    function item_load_manage($view,$id){
+    function item_load_manage($view,$id,$method,$load_id,$method_2){
         $this->check_permission("Customer Item","add");
-        if($view== "delete"){
-            $this->item_load_delete($id);
-            redirect(base_url("Customer/item_load_manage"));
-        }
-        if($view== "view"){
-            $this->item_load_view($id);
+        if($method== "view"){
+            if($method_2 == 'remove'){
+                $this->load->model('Customer_serial_no','CustomerSerialNo');
+                $this->load->model('Customer_item','CustomerItem');
+
+                $this->db->trans_start();
+
+                $this->CustomerSerialNo->update_by(
+                    ['SerialNo'=> $this->input->get('serialNo')] ,
+                    ['isDeleted'=>1  , 'reason' => $this->input->get('reason') ] );
+
+                $item=$this->CustomerSerialNo->get_by( ['SerialNo'=> $this->input->get('serialNo')]  );
+                $this->db->query("update {$this->CustomerItem->table()} SET Qty = Qty-1 WHERE CustomerItemDetailId = $item->CustomerItemId ");
+                if ($this->db->trans_status() === FALSE)
+                {
+                    $this->db->trans_rollback();
+                    echo 0;
+                }
+                else
+                {
+                    $this->db->trans_commit();
+                    echo 1;
+                }
+                exit;
+            }
+            $this->item_load_view($load_id);
         }else{
-            $this->check_permission(get_class(),"view");
-            $this->load->model('Customer_model','customer');
-            $this->load->model('Customer_item_master','CustomerItemMaster');
+            if($view== "customer_item"){
+                if($method_2=='delete'){
+                    $this->item_load_delete($load_id);
+                    redirect(base_url("Customer/customer_item/$id"));
+                }
+                $this->check_permission(get_class(),"view");
+                $this->load->model('Customer_model','customer');
+                $this->load->model('Customer_item_master','CustomerItemMaster');
 
-            $this->db->join($this->customer->table(),"{$this->customer->table()}.{$this->customer->getPrimaryKey()} = {$this->CustomerItemMaster->table()}.CustomerId");
-//			$this->db->group_by("{$this->customer->table()}.CustomerId");
-            $d['CustomerItem'] = $this->CustomerItemMaster->get_many_by(["Status"=>1]);
+                $this->db->join($this->customer->table(),"{$this->customer->table()}.{$this->customer->getPrimaryKey()} = {$this->CustomerItemMaster->table()}.CustomerId");
+                $d['CustomerItem'] = $this->CustomerItemMaster->get_many_by(["Status"=>1,"CustomerId"=>$id]);
 
-            $d['page'] = "$this->_page/load_item_manage";
-            $this->view($d);
+                $d['page'] = "$this->_page/load_item_manage";
+                $this->view($d);
+            }else{
+                $this->check_permission(get_class(),"view");
+                $this->load->model('Customer_model','customer');
+
+                $d['CustomerItem'] = $this->customer->get_many_by(["Status"=>1]);
+
+                $this->load->model('Customer_item_master','CustomerItemMaster');
+
+                $d['page'] = "$this->_page/load_item_customer_list";
+                $this->view($d);
+            }
         }
+
+
     }
 
     function item_load_view($id){
@@ -163,9 +200,9 @@ class Customer extends MY_Controller
         $d['CustomerItem'] = $this->CustomerItemMaster->with("ItemDetail")->get($id);
         foreach ($d['CustomerItem']->ItemDetail as &$item){
             $item = (object)array_merge((array) $item , (array) $this->item->fields("ItemCode,ItemName")->get($item->ItemId)  );
-           $item->serial = $this->CustomerSerialNo->get_many_by(['CustomerItemId'=>$item->CustomerItemDetailId]);
+           $item->serial = $this->CustomerSerialNo->get_many_by(['isDeleted'=>0,'CustomerItemId'=>$item->CustomerItemDetailId]);
         }
-       // p($d['CustomerItem']);
+//        p($d['CustomerItem']);
         $d['page'] = "$this->_page/item_load_view";
         $this->view($d);
     }
@@ -178,7 +215,7 @@ class Customer extends MY_Controller
         $this->db->query("update customer_item_serial_no 
 join customer_item on 
 customer_item.CustomerItemDetailId = customer_item_serial_no.CustomerItemId
-set customer_item_serial_no.SerialNo = concat(customer_item_serial_no.SerialNo, '-$id') 
+set customer_item_serial_no.SerialNo = concat(customer_item_serial_no.SerialNo, '-$id') , isDelete=1 
  where customer_item.CustomerItemId = $id ");
 
     }
