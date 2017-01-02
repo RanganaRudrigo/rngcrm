@@ -45,13 +45,13 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card-box">
-                                <h4 class="header-title m-t-0 m-b-30">Select Job to Technician</h4>
+                                <h4 class="header-title m-t-0 m-b-30">Select Customer Job</h4>
                                 <table id="datatable" class=" table table-striped " >
                                     <thead  >
                                     <tr>
                                         <th>#</th>
                                         <th>Job Order No</th>
-                                        <th>Technician</th>
+                                        <th>Customer</th>
                                         <th>Handover Date & Time</th>
                                     </tr>
                                     </thead>

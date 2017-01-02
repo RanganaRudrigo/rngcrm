@@ -206,6 +206,7 @@
                      $table = $('<table>').attr({
                         class : 'table table-bordered'
                      });
+                    console.log(obj);
                      $("#company_name").val(obj['company'])
                      $("#contactPerson").val(obj['customerName'])
 
@@ -214,6 +215,12 @@
                             }else{
                                 $("<input>").attr({id: "SerialNo" 
                                     ,name:"form[SerialNo]",type:'hidden',value:obj["SerialNo"]}).appendTo("form");
+                            }
+                    if($("#SerialNoId").length){
+                                $("#SerialNoId").val(obj["SerialNoId"])
+                            }else{
+                                $("<input>").attr({id: "SerialNoId"
+                                    ,name:"form[SerialNoId]",type:'hidden',value:obj["SerialNoId"]}).appendTo("form");
                             }
 
                       for(var i in obj){

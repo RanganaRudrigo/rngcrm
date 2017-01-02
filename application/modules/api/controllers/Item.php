@@ -44,7 +44,7 @@ class Item extends REST_Controller
         $this->load->model("Customer_serial_no");
 
         $serialNo = $this->db->query("SELECT  SerialNo FROM {$this->serial->table()} WHERE SerialNo = '{$this->get('SerialNo')}'
-        UNION SELECT  SerialNo FROM {$this->Customer_serial_no->table()} WHERE SerialNo = '{$this->get('SerialNo')}' ")->row();
+        UNION SELECT  SerialNo FROM {$this->Customer_serial_no->table()} WHERE isDeleted = 0 AND status = 1 AND SerialNo = '{$this->get('SerialNo')}' ")->row();
 
         $this->response([
             "hasError"=> is_object( $serialNo )

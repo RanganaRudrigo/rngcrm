@@ -57,7 +57,8 @@ class Customer extends REST_Controller
                 "$CustomerItemMaster.Status" => 1 ,
                 "$CustomerTable.Status" => 1 ,
                 "$ItemTable.Status" => 1  ,
-                "$CustomerSerialNoTable.isDeleted" => 0
+                "$CustomerSerialNoTable.isDeleted" => 0 ,
+                "$CustomerSerialNoTable.Status" => 1 ,
             ]);
 
         $this->db->group_start()

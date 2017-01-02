@@ -48,7 +48,8 @@ class Joborder extends REST_Controller
             "$CustomerItemMaster.Status" => 1 ,
             "$CustomerTable.Status" => 1 ,
             "$ItemTable.Status" => 1         ,
-            "$CustomerSerialNoTable.isDeleted" =>0 
+            "$CustomerSerialNoTable.isDeleted" =>0,
+            "$CustomerSerialNoTable.status" =>1,
             ]);
 
          $this->db->group_start()
@@ -61,7 +62,7 @@ class Joborder extends REST_Controller
                 ->group_end(); 
 
         $this->db->group_by("$CustomerSerialNoTable.SerialNo");
-        $this->db->select("SerialNo,cus_code,customerName,$CustomerTable.AreaCode,company,$CustomerTable.CustomerId,$ItemTable.ItemId,ItemCode,ItemName");
+        $this->db->select("SerialNoId,SerialNo,cus_code,customerName,$CustomerTable.AreaCode,company,$CustomerTable.CustomerId,$ItemTable.ItemId,ItemCode,ItemName");
 
 
         $this->response($this->db->get()->result());

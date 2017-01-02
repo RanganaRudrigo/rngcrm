@@ -139,12 +139,53 @@ class Customer extends MY_Controller
 
                 $this->db->trans_start();
 
-                $this->CustomerSerialNo->update_by(
-                    ['SerialNo'=> $this->input->get('serialNo')] ,
-                    ['isDeleted'=>1  , 'reason' => $this->input->get('reason') ] );
+                $this->CustomerSerialNo->update( $this->input->get('SerialNoId')   ,
+                    ['status'=> 0 , 'reason' => $this->input->get('reason') , 'note' => $this->input->get('note') ] );
 
-                $item=$this->CustomerSerialNo->get_by( ['SerialNo'=> $this->input->get('serialNo')]  );
+                $item=$this->CustomerSerialNo->get( $this->input->get('SerialNoId') );
                 $this->db->query("update {$this->CustomerItem->table()} SET Qty = Qty-1 WHERE CustomerItemDetailId = $item->CustomerItemId ");
+                if ($this->db->trans_status() === FALSE)
+                {
+                    $this->db->trans_rollback();
+                    echo 0;
+                }
+                else
+                {
+                    $this->db->trans_commit();
+                    echo 1;
+                }
+                exit;
+            }else if($method_2 == 'transfer_customer'){
+                $this->load->model('Customer_serial_no','CustomerSerialNo');
+                $this->load->model('Customer_item','CustomerItem');
+                $this->load->model('Customer_item_master','CustomerItemMaster');
+                $this->db->trans_start();
+
+                $item = $this->CustomerSerialNo->get( $this->input->get('SerialNoId') );
+
+                $this->CustomerSerialNo->update( $this->input->get('SerialNoId')   ,
+                    ['status'=> 0 ,'isDeleted'=> 1 , 'reason' => $this->input->get('reason') , 'note' => $this->input->get('note') ] );
+
+                $this->db->query("update {$this->CustomerItem->table()} SET Qty = Qty-1 WHERE CustomerItemDetailId = $item->CustomerItemId ");
+
+
+
+                // create new record
+                $CustomerItemId  = $this->CustomerItemMaster->insert([
+                    'CustomerId' => $this->input->get('CustomerId')
+                ]);
+                $item_detail = (array) $this->CustomerItem->get($item->CustomerItemId);
+
+                unset($item_detail['CustomerItemDetailId']);
+                $item_detail['CustomerItemId'] = $CustomerItemId ;
+                $item_detail['Qty'] = 1 ;
+                $item_detail['Property'] = $this->input->get('Property') ;
+
+                $item->CustomerItemId  = $this->CustomerItem->insert($item_detail);
+                unset($item->SerialNoId  );
+                $this->CustomerSerialNo->insert($item);
+
+
                 if ($this->db->trans_status() === FALSE)
                 {
                     $this->db->trans_rollback();
@@ -200,7 +241,7 @@ class Customer extends MY_Controller
         $d['CustomerItem'] = $this->CustomerItemMaster->with("ItemDetail")->get($id);
         foreach ($d['CustomerItem']->ItemDetail as &$item){
             $item = (object)array_merge((array) $item , (array) $this->item->fields("ItemCode,ItemName")->get($item->ItemId)  );
-           $item->serial = $this->CustomerSerialNo->get_many_by(['isDeleted'=>0,'CustomerItemId'=>$item->CustomerItemDetailId]);
+           $item->serial = $this->CustomerSerialNo->get_many_by(['isDeleted'=>0,'status'=>1,'CustomerItemId'=>$item->CustomerItemDetailId]);
         }
 //        p($d['CustomerItem']);
         $d['page'] = "$this->_page/item_load_view";
@@ -215,9 +256,11 @@ class Customer extends MY_Controller
         $this->db->query("update customer_item_serial_no 
 join customer_item on 
 customer_item.CustomerItemDetailId = customer_item_serial_no.CustomerItemId
-set customer_item_serial_no.SerialNo = concat(customer_item_serial_no.SerialNo, '-$id') , isDelete=1 
+set  isDelete=1 
  where customer_item.CustomerItemId = $id ");
 
     }
+
+
 
 }
