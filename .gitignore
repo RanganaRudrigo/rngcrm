@@ -1,11 +1,11 @@
 .idea/copyright/profiles_settings.xml
-.idea/kasl.iml
+.idea/rngcrm.iml
 .idea/modules.xml
 .idea/workspace.xml
-.idea/vcs.xml
-.idea/vcs.xml
 .idea/vcs.xml
 .idea/.name
 .idea/misc.xml
 .idea/encodings.xml
 application/config/constants.php
+Job/
+uploads/
