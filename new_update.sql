@@ -1,12 +1,12 @@
 ALTER TABLE `customer_item_serial_no`
-	DROP PRIMARY KEY; 
-	
+	DROP PRIMARY KEY;
+
 ALTER TABLE `customer_item_serial_no`
 	ADD COLUMN `SerialNoId` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
 	ADD PRIMARY KEY (`SerialNoId`);
 
 
- UPDATE customer_item_serial_no SET customer_item_serial_no.isDeleted=1   , customer_item_serial_no.status = 0
+ UPDATE customer_item_serial_no SET customer_item_serial_no.isDeleted= 0   , customer_item_serial_no.status = 0
  WHERE customer_item_serial_no.CustomerItemId IN (
  SELECT customer_item.CustomerItemDetailId FROM  customer_item
  JOIN customer_item_master ON customer_item_master.CustomerItemId = customer_item.CustomerItemId
