@@ -118,7 +118,7 @@
                 <td> <select class="form-control"    >
                         <option value="Mistaken Entire" > Mistaken Entire </option>
                         <option value="1" > Call Over </option>
-                        <option value="other" > Other </option>
+<!--                        <option value="other" > Other </option>-->
                     </select>  </td>
             </tr>
             <tr>
@@ -140,12 +140,12 @@
                 <span class="input-group-addon bg-custom b-0"><i class="fa fa-search"></i></span>
             </div>
         </fieldset>
-        <fieldset class="form-group job-order-1">
+        <!--<fieldset class="form-group job-order-1">
             <label for="exampleInputEmail1">  Property </label>
             <select class="form-control" id="property" >
                 <option value='1' >RNG</option> <option value='2'  >Customer Property</option>
             </select>
-        </fieldset>
+        </fieldset>-->
         <button class="btn btn-primary pull-right m_b_10 "> OK </button>
         <button class="btn btn-danger pull-right m_b_10 m_r_10 close_model"> Cancel </button>
         <div class="clearfix"></div>
@@ -250,7 +250,7 @@
                 var CustomerId = $("#CustomerId").val() , serialNo = $("#serialNo").val() , property = $("#property").val() ;
                 $.ajax({
                     url: "<?= current_url() ?>/transfer_customer",
-                    data : { CustomerId : CustomerId , SerialNoId : serialNo ,Property:property },
+                    data : { CustomerId : CustomerId , SerialNoId : serialNo /*,Property:property*/ },
                     success: function (result) {
                         if(result){
                             $('.removeTr').remove();

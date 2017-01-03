@@ -137,6 +137,7 @@ class Customer extends MY_Controller
                 $this->load->model('Customer_serial_no','CustomerSerialNo');
                 $this->load->model('Customer_item','CustomerItem');
 
+
                 $this->db->trans_start();
 
                 $this->CustomerSerialNo->update( $this->input->get('SerialNoId')   ,
@@ -156,19 +157,20 @@ class Customer extends MY_Controller
                 }
                 exit;
             }else if($method_2 == 'transfer_customer'){
+                $this->load->model('Customer_model','Customer');
                 $this->load->model('Customer_serial_no','CustomerSerialNo');
                 $this->load->model('Customer_item','CustomerItem');
                 $this->load->model('Customer_item_master','CustomerItemMaster');
                 $this->db->trans_start();
 
+                $customer = $this->Customer->get($this->input->get('CustomerId')) ;
+
                 $item = $this->CustomerSerialNo->get( $this->input->get('SerialNoId') );
 
                 $this->CustomerSerialNo->update( $this->input->get('SerialNoId')   ,
-                    ['status'=> 0 ,'isDeleted'=> 1 , 'reason' => $this->input->get('reason') , 'note' => $this->input->get('note') ] );
+                    ['status'=> 0 ,'isDeleted'=> 1 , 'reason' => "Transfer Item" , 'note' => "$customer->cus_code - $customer->customerName - $customer->company " ] );
 
                 $this->db->query("update {$this->CustomerItem->table()} SET Qty = Qty-1 WHERE CustomerItemDetailId = $item->CustomerItemId ");
-
-
 
                 // create new record
                 $CustomerItemId  = $this->CustomerItemMaster->insert([
@@ -179,7 +181,7 @@ class Customer extends MY_Controller
                 unset($item_detail['CustomerItemDetailId']);
                 $item_detail['CustomerItemId'] = $CustomerItemId ;
                 $item_detail['Qty'] = 1 ;
-                $item_detail['Property'] = $this->input->get('Property') ;
+//                $item_detail['Property'] = $this->input->get('Property') ;
 
                 $item->CustomerItemId  = $this->CustomerItem->insert($item_detail);
                 unset($item->SerialNoId  );
