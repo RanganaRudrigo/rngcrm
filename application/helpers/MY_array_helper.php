@@ -27,7 +27,7 @@ if ( ! function_exists('unique'))
         $temp_uids=array();
         $unique_results = array();
         foreach($item as $result){
-            if(is_array($result))    $result = arrayToObject($result);
+            if(is_array($result))    $result = (object)($result);
             if(!in_array($result->$k,$temp_uids)){
                 $temp_uids[]=$result->$k;
                 $unique_results[]= $result ;
@@ -79,4 +79,17 @@ if( ! function_exists('array_filer') ){
         }
         return null;
     }
+}
+
+function add_element($array,$element){
+    if(is_array($array) && is_array($element) && !empty($array) && !empty($element)  ) {
+        foreach ($array as &$item) {
+            if(is_array($item)) {
+                $item = array_merge($item,$element);
+            }elseif(is_object($item)){
+                $item =(object)array_merge((array)$item,$element);
+            }
+        }
+    }
+    return $array;
 }
