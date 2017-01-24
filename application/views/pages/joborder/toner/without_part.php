@@ -86,14 +86,11 @@
                                 </fieldset>
 
                                 <fieldset class="form-group job-order-1">
-
-
                                     <label for="exampleInputEmail1">Start Time</label>
                                     <div class="input-group clockpicker ">
                                         <input type="text" name="form[StartTime]"  class="form-control timepicker" value="<?= set_value("form[StartTime]",date('H:i')) ?>">
                                         <span class="input-group-addon"> <span class="zmdi zmdi-time"></span> </span>
                                     </div>
-
                                 </fieldset>
 
                                 <fieldset class="form-group job-order-2 ">
