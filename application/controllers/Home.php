@@ -109,6 +109,17 @@ class Home extends CI_Controller
     }
 
     function _quotation_jobs(){
+        $this->load->model("Joborder_model");
+        $this->load->model('Job_order_close_model');
+        $this->db->join( $this->Job_order_close_model->table() ,
+            "{$this->Job_order_close_model->table()}.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}"  )
+            ->where([
+                "PartUsedFor" => 2 ,
+                "{$this->Job_order_close_model->table()}.Status" => 1
+            ])->select("{$this->Joborder_model->table()}.* , {$this->Job_order_close_model->table()}.Note as complainDetails");
+        return $this->Joborder_model->count_by(["Status"=>1]);
+
+
         $this->load->model("Joborder_model",'model');
         $table = $this->model->table();
 
