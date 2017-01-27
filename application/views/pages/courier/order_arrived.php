@@ -53,8 +53,12 @@
                                 <thead class="thead-default">
                                 <tr>
                                     <th>#</th>
-                                    <th>Job Order No</th>
+                                    <th>Job No</th>
+                                    <th>Item</th>
+                                    <th>Serial No</th>
                                     <th>Customer</th>
+                                    <th>Address</th>
+                                    <th>complain Details</th>
                                     <th>Complain Date</th>
                                 </tr>
                                 </thead>
@@ -63,7 +67,11 @@
                                     <tr class="data-tr" data-object="<?= htmlentities(json_encode($row)) ?>" >
                                         <td> <?= $k + 1 ?>  </td>
                                         <td> <?= $row->jobOrder->jobOrderNo ?> </td>
+                                        <td> <?= $row->jobOrder->Item->ItemCode ?> - <?= $row->jobOrder->Item->ItemName ?> </td>
+                                        <td> <?= $row->jobOrder->SerialNo ?> </td>
                                         <td> <?= $row->jobOrder->Customer->company ?> </td>
+                                        <td> <?= $row->jobOrder->Customer->address ?> </td>
+                                        <td> <?= $row->jobOrder->jobOrder->complainDetails ?> </td>
                                         <td> <?= date("Y-m-d",strtotime($row->HandoverDate)) ?> </td>
                                     </tr>
                                 <?php endforeach; ?>

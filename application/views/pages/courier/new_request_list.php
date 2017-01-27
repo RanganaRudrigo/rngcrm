@@ -50,22 +50,26 @@
                                     <thead class="thead-default">
                                     <tr>
                                         <th>#</th>
-                                        <th>Job Order No</th>
+                                        <th>Job No</th>
+                                        <th>Item</th>
+                                        <th>Serial No</th>
                                         <th>Customer</th>
-                                        <th>Handover  Date</th>
-                                        <th>Action</th>
+                                        <th>Address</th>
+                                        <th>complain Details</th>
+                                        <th>Complain Date</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php foreach ($records as $k => $row): ?>
-                                        <tr class="data-tr"   >
+                                        <tr class="data-tr" data-object="<?= htmlentities(json_encode($row)) ?>" >
                                             <td> <?= $k + 1 ?>  </td>
                                             <td> <?= $row->jobOrder->jobOrderNo ?> </td>
+                                            <td> <?= $row->jobOrder->Item->ItemCode ?> - <?= $row->jobOrder->Item->ItemName ?> </td>
+                                            <td> <?= $row->jobOrder->SerialNo ?> </td>
                                             <td> <?= $row->jobOrder->Customer->company ?> </td>
+                                            <td> <?= $row->jobOrder->Customer->address ?> </td>
+                                            <td> <?= $row->jobOrder->jobOrder->complainDetails ?> </td>
                                             <td> <?= date("Y-m-d",strtotime($row->HandoverDate)) ?> </td>
-                                            <td class="text-center" >
-                                                <a href="<?= base_url("courier/new_request")."/delete/$row->JobToCourierId" ?>" class="btn btn-danger fa fa-times delete-btn " > Delete </a>
-                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                     </tbody>
