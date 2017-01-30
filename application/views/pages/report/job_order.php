@@ -52,12 +52,12 @@
                                 </fieldset>
 
                                     <?php foreach ($reports as $k => $re ): ?>
-                                        <?= $k%4==0 ?  '<fieldset class="form-group col-lg-3 ">' : '' ?>
+                                        <?= $k%5==0 ?  '<fieldset class="form-group col-lg-3 ">' : '' ?>
                                         <div class="radio">
                                             <?= form_radio('jobType',$re,$this->input->get('jobType') == $re ,['id'=>$re]) ?>
                                             <?= form_label(str_replace('_'," ",$re), '',['for'=>$re] ) ?>
                                         </div>
-                                        <?= $k%4==3 || count($reports) == $k+1 ?  '</fieldset>' : '' ?>
+                                        <?= $k%5==4 || count($reports) == $k+1 ?  '</fieldset>' : '' ?>
                                     <?php endforeach; ?>
 
                                 <div class="field_binder" >

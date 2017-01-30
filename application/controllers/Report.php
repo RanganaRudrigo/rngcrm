@@ -87,6 +87,8 @@ class Report extends MY_Controller
             'Courier_In_Hand_Reports' ,
             'Collection_Pending_Report' ,
           //  'Daily_Job_Reports' ,
+            'Printer_Job' ,
+            'Toner_Job' ,
             'All_Jobs' ,
             'All_Pending_Jobs' ,
         ];
@@ -111,6 +113,27 @@ class Report extends MY_Controller
             $this->input->get('jobType') ? call_user_func([get_class(),"_".$this->input->get('jobType')]) : call_user_func([get_class(),"_All_Jobs"])
                 );
         $this->view($d);
+    }
+
+    function _Printer_Job(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1,'JobOrderType'=>'P']);
+        $d["page"] = "$this->page/printer_job"; 
+        return $d;
+    }
+    function _Toner_Job(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1,'JobOrderType'=> 'T']);
+        $d["page"] = "$this->page/toner_job";
+        return $d;
     }
 
     function _All_Jobs(){
