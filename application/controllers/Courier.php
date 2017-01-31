@@ -102,7 +102,8 @@ class Courier extends MY_Controller
 //        $this->load->model("Job_order_courier_model","JobOrderCourier");
 
 //        $d['records'] = $this->JobOrderCourier->with("jobOrder")->get_many_by(['Status'=>1]);
-            $d['records'] = $this->JobOrder->with("Customer")->get_many_by(['JobStatus'=>3,'Status'=>1,'inHouse'=> 0 ]);
+            $d['records'] = $this->JobOrder->with("Customer")->with('Item')->get_many_by(['JobStatus'=>3,'Status'=>1,'inHouse'=> 0 ]);
+            //p($d['records']);
             $d['page'] ="$this->_page/new_request";
 //        p($d['records'] );
 

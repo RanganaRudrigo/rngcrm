@@ -66,13 +66,13 @@
                                 <?php foreach ($records as $k => $row): ?>
                                     <tr class="data-tr" data-object="<?= htmlentities(json_encode($row)) ?>" >
                                         <td> <?= $k + 1 ?>  </td>
-                                        <td> <?= $row->jobOrder->jobOrderNo ?> </td>
-                                        <td> <?= $row->jobOrder->Item->ItemCode ?> - <?= $row->jobOrder->Item->ItemName ?> </td>
-                                        <td> <?= $row->jobOrder->SerialNo ?> </td>
-                                        <td> <?= $row->jobOrder->Customer->company ?> </td>
-                                        <td> <?= $row->jobOrder->Customer->address ?> </td>
-                                        <td> <?= $row->jobOrder->jobOrder->complainDetails ?> </td>
-                                        <td> <?= date("Y-m-d",strtotime($row->HandoverDate)) ?> </td>
+                                        <td> <?= $row->jobOrderNo ?> </td>
+                                        <td> <?= $row->Item->ItemCode ?> - <?= $row->Item->ItemName ?> </td>
+                                        <td> <?= $row->SerialNo ?> </td>
+                                        <td> <?= $row->Customer->company ?> </td>
+                                        <td> <?= $row->Customer->address ?> </td>
+                                        <td> <?= $row->complainDetails ?> </td>
+                                        <td> <?= date("Y-m-d",strtotime($row->ComplainDate)) ?> </td>
                                     </tr>
                                 <?php endforeach; ?>
                                 </tbody>
