@@ -52,6 +52,9 @@
                                         <th>#</th>
                                         <th>Job Order No</th>
                                         <th>Customer</th>
+                                        <th>Tech</th>
+                                        <th>Item</th>
+                                        <th>Serial No </th>
                                         <th>Handover Date & Time</th>
                                     </tr>
                                     </thead>
@@ -61,6 +64,9 @@
                                             <th scope="row"> <?= $k+1 ?> </th>
                                             <td><?= $row->jobOrderNo ?></td>
                                             <td><?= $row->company ?>-<?= $row->contactPerson ?></td>
+                                            <td><?= $row->JOB_TO_TECH->Technician->title ?><?= $row->JOB_TO_TECH->Technician->technicianName ?></td>
+                                            <td><?= $row->Item->ItemCode  ?><?= $row->Item->ItemName  ?></td>
+                                            <td><?= $row->SerialNo  ?> </td>
                                             <td><?= $row->JOB_TO_TECH->HandoverDate ?> - <?= $row->JOB_TO_TECH->HandoverTime ?> </td>
                                         </tr>
                                     <?php endforeach; ?>

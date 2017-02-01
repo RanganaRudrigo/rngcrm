@@ -193,8 +193,8 @@ class In_house extends MY_Controller
 
         $this->db->join($CustomerTable , "$CustomerTable.CustomerId = $table.CustomerId");
 
-        $this->db->select("ComplainDate  ,JobOrderId,JobOrderType,RepairModeId,SerialNo,company,complainDetails,contactPerson,jobOrderNo  ");
-        $records = $this->model->with('JOB_TO_TECH')->get_many_by(['Status'=> 1 ,'JobOrderType'=> 'P' , "JobStatus" => 1 ,'inHouse'=> 1 ]);
+        $this->db->select("ComplainDate ,ItemId ,JobOrderId,JobOrderType,RepairModeId,SerialNo,company,complainDetails,contactPerson,jobOrderNo  ");
+        $records = $this->model->with('Item')->with('JOB_TO_TECH')->get_many_by(['Status'=> 1 ,'JobOrderType'=> 'P' , "JobStatus" => 1 ,'inHouse'=> 1 ]);
         // p($records);
         $d['repairs'] = $this->repair->get_many_by(['Status'=>1]) ;
         $d['records'] = $records ;
@@ -267,7 +267,7 @@ class In_house extends MY_Controller
         $this->db->join($CustomerTable , "$CustomerTable.CustomerId = $table.CustomerId");
 
         $this->db->select("ComplainDate ,$table.CustomerId,ItemId,JobOrderId,JobOrderType,RepairModeId,SerialNo,company,complainDetails,contactPerson,jobOrderNo  ");
-        $records = $this->model->with('JOB_TO_TECH')->get_many_by(['Status'=> 1 ,'JobOrderType'=> 'T' , "JobStatus" => 1 ,'inHouse'=> 1 ]);
+        $records = $this->model->with('Item')->with('JOB_TO_TECH')->get_many_by(['Status'=> 1 ,'JobOrderType'=> 'T' , "JobStatus" => 1 ,'inHouse'=> 1 ]);
         // p($records);
         $d['repairs'] = $this->repair->get_many_by(['Status'=>1]) ;
         $d['records'] = $records ;
