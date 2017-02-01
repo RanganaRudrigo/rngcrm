@@ -147,12 +147,16 @@ class Joborder  extends MY_Controller {
 
             $this->db->join($CustomerTable , "$CustomerTable.CustomerId = $table.CustomerId");
 
-            $this->db->select("ComplainDate ,$table.CustomerId,ItemId,JobOrderId,JobOrderType,RepairModeId,SerialNo,company,complainDetails,contactPerson,jobOrderNo  ");
+            $this->db->select("ComplainDate ,$table.CustomerId,ItemId,$table.JobOrderId,JobOrderType,RepairModeId,SerialNo,company,complainDetails,contactPerson,$table.jobOrderNo ,job_order_to_technician_remove.reason ");
+
+            $this->db->join('job_order_to_technician_remove',"job_order_to_technician_remove.JobOrderId = $table.JobOrderId",'LEFT');
 
             $d = [
                 "page" => "$this->_page/passToTechnician",
                 'records' => $this->model->get_many_by(['Status'=> 1 , "JobStatus" => 0 ,'inHouse'=> 0  ])
             ];
+
+          //  p($d['records']);
 
             $this->view($d);
         }

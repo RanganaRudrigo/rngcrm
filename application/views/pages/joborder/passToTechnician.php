@@ -43,7 +43,7 @@
             <?php $this->view('includes/notification.php'); ?>
 
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="card-box">
                         <h4 class="header-title m-t-0 m-b-30">Select Job Order Number</h4>
                         <?= form_error('form[JobOrderId]') ?>
@@ -54,6 +54,7 @@
                                     <th>#</th>
                                     <th>Job Order No</th>
                                     <th>Customer</th>
+                                    <th>Reason</th>
                                     <th>Complain Date</th>
                                 </tr>
                                 </thead>
@@ -63,6 +64,7 @@
                                         <td> <?= $k + 1 ?>  </td>
                                         <td> <?= $row->jobOrderNo ?> </td>
                                         <td> <?= $row->company ?> </td>
+                                        <td> <?= $row->reason ?> </td>
                                         <td> <?= $row->ComplainDate ?> </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -72,7 +74,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <?= form_open() ?>
                     <div class="card-box">
                         <h4 class="header-title m-t-0 m-b-30">General Information</h4>
