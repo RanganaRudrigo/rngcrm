@@ -154,7 +154,7 @@ class Home extends CI_Controller
         $this->db->join('job_order_to_technician_remove', "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}")
             ->where('reason','part pending');
 
-        return $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->count_by(["Status"=>1,'JobStatus NOT'=>[2,4]]);
+        return $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->count_by(["Status"=>1,'JobStatus NOT'=>[2]]);
 
     }
 
@@ -165,7 +165,7 @@ class Home extends CI_Controller
             $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
         }
         return  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")
-            ->count_by(["Status"=>1 ,'JobStatus'=>1 , 'inHouse'=>0 ]);
+            ->count_by(["Status"=>1 ,'JobStatus'=> 0 , 'inHouse'=>0 ]);
 
     }
 
@@ -179,13 +179,13 @@ class Home extends CI_Controller
         $this->db->join('job_order_to_technician_remove', "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}")
             ->where('reason','temporary solution');
 
-        return $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->count_by(["Status"=>1,'JobStatus NOT'=>[2,4] ]);
+        return $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->count_by(["Status"=>1,'JobStatus NOT'=>[2] ]);
 
     }
 
     function _Collection_Pending_Report(){
         $this->load->model("Job_pass_to_courier_model","JobPassToCourier");
-        return $this->Joborder_model->with("Customer")->with("JOB_TO_TECH")->with("Item")->with("Repair")->count_by(['JobStatus'=> 3 ,'Status'=>1,'inHouse'=> 0 ]);
+        return $this->Joborder_model->with("Customer")->with("JOB_TO_TECH")->with("Item")->with("Repair")->count_by(['JobStatus'=> [3,4] ,'Status'=>1 ]);
 
     }
 
