@@ -66,6 +66,38 @@
                         <span class="text-muted"> &nbsp; </span>
                     </div>
                 </div>
+                <div class="col-xs-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card-box tilebox-one">
+                        <i class="icon-layers pull-xs-right text-muted"></i>
+                        <h6 class="text-muted text-uppercase m-b-20">  <a href="<?= base_url('joborder/passToTechnician?type=not_attend') ?>" > Not Attend Jobs </a> </h6>
+                        <h2 class="m-b-20" data-plugin="counterup"><?= $notAttendJob ?></h2>
+                        <span class="text-muted"> &nbsp; </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card-box tilebox-one">
+                        <i class="icon-layers pull-xs-right text-muted"></i>
+                        <h6 class="text-muted text-uppercase m-b-20">  <a href="<?= base_url('joborder/passToTechnician?type=parts_pending') ?>" > Parts Pending Jobs </a> </h6>
+                        <h2 class="m-b-20" data-plugin="counterup"><?= $partsPendingJob ?></h2>
+                        <span class="text-muted"> &nbsp; </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card-box tilebox-one">
+                        <i class="icon-layers pull-xs-right text-muted"></i>
+                        <h6 class="text-muted text-uppercase m-b-20">  <a href="<?= base_url('joborder/passToTechnician?type=working_solution') ?>" > Working Solution Jobs </a> </h6>
+                        <h2 class="m-b-20" data-plugin="counterup"><?= $workingSolutionJobs ?></h2>
+                        <span class="text-muted"> &nbsp; </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card-box tilebox-one">
+                        <i class="icon-layers pull-xs-right text-muted"></i>
+                        <h6 class="text-muted text-uppercase m-b-20">  <a href="<?= base_url('courier/new_request') ?>" > Collection Pending Jobs </a> </h6>
+                        <h2 class="m-b-20" data-plugin="counterup"><?= $collectionPendingJob ?></h2>
+                        <span class="text-muted"> &nbsp; </span>
+                    </div>
+                </div>
             </div>
             <!--
              <div class="row">

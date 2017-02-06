@@ -52,6 +52,10 @@ class Joborder extends REST_Controller
             "$CustomerSerialNoTable.status" =>1,
             ]);
 
+        if($this->get("CustomerId")) {
+            $this->db->where("$CustomerTable.CustomerId",$this->get("CustomerId"));
+        }
+
          $this->db->group_start()
                     ->like('cus_code', $this->get('str'))
                     ->or_like('customerName', $this->get('str'))

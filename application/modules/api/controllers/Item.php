@@ -16,6 +16,7 @@ class Item extends REST_Controller
             ->or_like('ItemName', $this->get('str'))
             ->group_end()
             ->select('ItemId,ItemCode,ItemName,has_serial') ;
+        
 
         $items = $this->model->get_many_by(['status'=>1 ]);
         $this->response($items);
@@ -30,6 +31,10 @@ class Item extends REST_Controller
             ->group_end()
             ->select("{$this->model->table()}.ItemId,ItemCode,ItemName,SerialNo") ;
 
+        if($this->get('CustomerId')) {
+
+        }
+        
         $items = $this->serial->get_many_by(['status'=>1 ]);
         $this->response($items);
     }

@@ -35,3 +35,11 @@ class Joborder_model  extends MY_Model
 
 
 }
+/*
+JobStatus
+0 - Create A New Job
+1 - After Pass to Technician
+2 - Complete Job
+3 - Pass to Courier Dep
+4 - Handover to Courier Company 
+*/

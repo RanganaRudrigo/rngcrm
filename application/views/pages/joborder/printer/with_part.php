@@ -80,6 +80,11 @@
                         <div class="row">
                             <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-6">
 
+                                <fieldset class="form-group">
+                                    <label for="SerialNo"> Printer Serial No  </label>
+                                    <input type="text" name="SerialNo" disabled required  id="SerialNo"  class="form-control "   >
+                                    <input type="hidden" name="SerialNoId" id="SerialNoId" >
+                                </fieldset>
 
                                 <fieldset class="form-group">
                                     <label for="exampleInputEmail1">Job Date</label>
@@ -170,7 +175,7 @@
                                 <fieldset class="form-group">
                                     <label for="repair_mode"> Job Status </label>
                                     <select class="form-control " name="form[JobStatus]" required id="repair_mode">
-
+                                        <option value=""> Select Job Status  </option>
                                         <option value="1">Completed</option>
                                         <option value="2" >Pass To Courier</option>
                                     </select>
@@ -193,7 +198,7 @@
                         </div>
                     </div>
                     <input type="hidden" name="form[JobOrderType]" value="P" >
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="submit"   data-text=""  class="btn btn-primary confirm-btn">Add</button>
                     <?= form_close() ?>
                 </div>
                 <!-- end row -->
@@ -320,6 +325,7 @@
 </div>
 
 <script type="text/javascript">
+    var selectedJobOrder = null;
     $(document).ready(function() {
         $("#parts_used_for").change(function (e) {
             var val = $(this).val() , container = $("#data-bind-container");
@@ -350,7 +356,10 @@
 
         $("form").submit(function () {
             if(!$("#JobOrderId").length) alert("Please Select the job order");
-            return $("#JobOrderId").length ? true : false   ;
+            else {
+                return confirm("Do Your Want To Save this Record ???  \nIt's " + $("#repair_mode option:selected"  ).text())
+            }
+            return false;
         });
        $('#datatable').DataTable({             "scrollY":        "300px",             "scrollCollapse": true,             "paging":         false         }); 
         DatePickerEnable();
@@ -364,7 +373,7 @@
         $("#datatable").on('click','.data-tr',function (e) {
             var $this = $(this) , obj = $this.data('object') ;
             if(obj.JobOrderId){
-                console.log(obj);
+                selectedJobOrder = obj ;
                 if($("#JobOrderId").length){
                     $("#JobOrderId").val(obj.JobOrderId)
                     $("#TechnicianId").val(obj.TechnicianId)
@@ -383,6 +392,7 @@
                     }).appendTo("form");
                 }
                 $("#RepairModeId").val(obj.RepairModeId);
+                $("#SerialNo").val(obj.SerialNo).removeAttr('disabled');
             }else{
                 location.reload();
             }
@@ -391,7 +401,34 @@
         });
 
     });
-
+    $('#SerialNo').autocomplete({
+        'source': function(request, response) {
+            if(selectedJobOrder == null  ) {
+                alert("Please Selete JobOrder First");
+            }else{
+                if(request.length){
+                    $.ajax({
+                        url: Api+"Joborder/product",
+                        data:{str: request , CustomerId : selectedJobOrder.CustomerId },
+                        dataType: 'json',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label:item['company']+" > "+ item['ItemCode'] + "-"+ item['ItemName'] +" ( "+ item['SerialNo'] +")"  ,
+                                    value: encodeURI(JSON.stringify(item))
+                                }
+                            }));
+                        }
+                    });
+                }
+            }
+        },
+        'select': function(json) {
+            var obj = $.parseJSON(decodeURI(json['value']));
+            $("#SerialNo").val(obj["SerialNo"]);
+            $("#SerialNoId").val(obj["SerialNoId"])
+        }
+    });
     function ProductSearch() {
         var loadItemList = 0 ,
             obj = [],

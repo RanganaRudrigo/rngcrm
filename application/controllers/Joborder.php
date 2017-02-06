@@ -151,6 +151,14 @@ class Joborder  extends MY_Controller {
 
             $this->db->join('job_order_to_technician_remove',"job_order_to_technician_remove.JobOrderId = $table.JobOrderId",'LEFT');
 
+            if($this->input->get('type')) {
+                switch ($this->input->get('type')) {
+                    case 'not_attend' : $this->db->where('job_order_to_technician_remove.reason',NULl ); break;
+                    case 'parts_pending' : $this->db->where('job_order_to_technician_remove.reason', 'part pending' ); break;
+                    case 'working_solution' : $this->db->where('job_order_to_technician_remove.reason','temporary solution' ); break;
+                }
+            }
+
             $d = [
                 "page" => "$this->_page/passToTechnician",
                 'records' => $this->model->get_many_by(['Status'=> 1 , "JobStatus" => 0 ,'inHouse'=> 0  ])
@@ -205,9 +213,21 @@ class Joborder  extends MY_Controller {
                 $this->file_upload("jobSheet","jobSheet");
                 $this->file_upload("BeforeJob","BeforeJob");
                 $this->file_upload("AfterJob","AfterJob");
-            } 
+            }
 
-            $this->model->update($this->input->post("form[JobOrderId]"),["JobStatus"=>2]);
+            if($this->input->post('SerialNoId')) {
+                $jobOrderUpdate = [
+                    "JobStatus"=>2 ,
+                    "SerialNoId" => $this->input->post('SerialNoId'),
+                    "SerialNo" => $this->input->post('SerialNo'),
+                ];
+            }else{
+                $jobOrderUpdate = [
+                    "JobStatus"=>2
+                ];
+            }
+
+            $this->model->update($this->input->post("form[JobOrderId]"),$jobOrderUpdate);
 
             // free or invoice
             if($this->input->post('item')){
@@ -274,7 +294,7 @@ class Joborder  extends MY_Controller {
 
         $this->db->join($CustomerTable , "$CustomerTable.CustomerId = $table.CustomerId");
 
-        $this->db->select("ComplainDate ,ItemId ,JobOrderId,JobOrderType,RepairModeId,SerialNo,company,complainDetails,contactPerson,jobOrderNo  ");
+        $this->db->select("$CustomerTable.CustomerId, ComplainDate ,ItemId ,JobOrderId,JobOrderType,RepairModeId,SerialNo,company,complainDetails,contactPerson,jobOrderNo  ");
         $records = $this->model->with('Item')->with('JOB_TO_TECH')->get_many_by(['Status'=> 1 ,'JobOrderType'=> 'P' , "JobStatus" => 1 ,'inHouse'=> 0 ]);
         // p($records);
         $d['repairs'] = $this->repair->get_many_by(['Status'=>1]) ;
@@ -317,7 +337,19 @@ class Joborder  extends MY_Controller {
                 $this->file_upload("AfterJob","AfterJob");
             }
 
-            $this->model->update($this->input->post("form[JobOrderId]"),["JobStatus"=>2]);
+            if($this->input->post('SerialNoId')) {
+                $jobOrderUpdate = [
+                    "JobStatus"=>2 ,
+                    "SerialNoId" => $this->input->post('SerialNoId'),
+                    "SerialNo" => $this->input->post('SerialNo'),
+                ];
+            }else{
+                $jobOrderUpdate = [
+                    "JobStatus"=>2
+                ];
+            }
+
+            $this->model->update($this->input->post("form[JobOrderId]"),$jobOrderUpdate);
 
             if( $this->input->post("replace") ){
                 $this->load->model("Job_order_close_toner_model","JobOrderCloseToner");
@@ -348,7 +380,7 @@ class Joborder  extends MY_Controller {
 
         $this->db->join($CustomerTable , "$CustomerTable.CustomerId = $table.CustomerId");
 
-        $this->db->select("ComplainDate ,$table.CustomerId,ItemId,JobOrderId,JobOrderType,RepairModeId,SerialNo,company,complainDetails,contactPerson,jobOrderNo  ");
+        $this->db->select("$CustomerTable.CustomerId,ComplainDate ,$table.CustomerId,ItemId,JobOrderId,JobOrderType,RepairModeId,SerialNo,company,complainDetails,contactPerson,jobOrderNo  ");
         $records = $this->model->with('Item')->with('JOB_TO_TECH')->get_many_by(['Status'=> 1 ,'JobOrderType'=> 'T' , "JobStatus" => 1 ,'inHouse'=> 0 ]);
         // p($records);
         $d['repairs'] = $this->repair->get_many_by(['Status'=>1]) ;

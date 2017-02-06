@@ -51,6 +51,11 @@ class Home extends CI_Controller
         $d['technicianHandToner'] = $this->_technician_hand_toner_job();
         $d['pendingJob'] = $this->_pending_jobs();
         $d['quotationJob'] = $this->_quotation_jobs();
+        $d['partsPendingJob'] = $this->_Parts_Pending_Job();
+        $d['notAttendJob'] = $this->_Not_Attend_Jobs();
+        $d['workingSolutionJobs'] = $this->_Temporary_Solution();
+        $d['collectionPendingJob'] = $this->_Collection_Pending_Report();
+        $d['pendingJob'] = $this->_Collection_Pending_Report();
 
         $this->load->view('dashboard',$d);
     }
@@ -137,6 +142,51 @@ class Home extends CI_Controller
 
        // return   $this->model->get_many_by(['Status'=> 1  ]);
         return   $this->model->count_by(['Status'=> 1  ]);
+    }
+
+    function _Parts_Pending_Job(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+        $this->db->join('job_order_to_technician_remove', "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}")
+            ->where('reason','part pending');
+
+        return $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->count_by(["Status"=>1,'JobStatus NOT'=>[2,4]]);
+
+    }
+
+    function _Not_Attend_Jobs(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+        return  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")
+            ->count_by(["Status"=>1 ,'JobStatus'=>1 , 'inHouse'=>0 ]);
+
+    }
+
+    function _Temporary_Solution(){
+        if($this->input->get('daterange')){
+            $date = explode("-",$this->input->get('daterange'));
+            $this->db->where("ComplainDate >=", date("Y-m-d",strtotime($date[0])) );
+            $this->db->where("ComplainDate <=", date("Y-m-d",strtotime($date[1])) );
+        }
+
+        $this->db->join('job_order_to_technician_remove', "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}")
+            ->where('reason','temporary solution');
+
+        return $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->count_by(["Status"=>1,'JobStatus NOT'=>[2,4] ]);
+
+    }
+
+    function _Collection_Pending_Report(){
+        $this->load->model("Job_pass_to_courier_model","JobPassToCourier");
+        return $this->Joborder_model->with("Customer")->with("JOB_TO_TECH")->with("Item")->with("Repair")->count_by(['JobStatus'=> 3 ,'Status'=>1,'inHouse'=> 0 ]);
+
     }
 
 }

@@ -82,6 +82,13 @@
 
 
                                 <fieldset class="form-group">
+                                    <label for="SerialNo"> Printer Serial No  </label>
+                                    <input type="text" name="SerialNo" disabled required  id="SerialNo"  class="form-control "   >
+                                    <input type="hidden" name="SerialNoId" id="SerialNoId" >
+                                </fieldset>
+
+
+                                <fieldset class="form-group">
                                     <label for="exampleInputEmail1">Job Date</label>
                                     <div class="input-group">
                                         <input type="text" name="form[EndDate]" required value="<?= set_value("form[EndDate]",date('Y-m-d')) ?>" class="form-control datepicker" data-date-format="yyyy-mm-dd"  placeholder="yyyy-mm-dd"
@@ -169,7 +176,7 @@
                                 <fieldset class="form-group">
                                     <label for="repair_mode"> Job Status </label>
                                     <select class="form-control " name="form[JobStatus]" required id="repair_mode">
-                                         
+                                        <option value=""> Select Job Status  </option>
                                         <option value="1">Completed</option>
                                         <option value="2" >Pass To Courier</option>
                                     </select>
@@ -229,12 +236,17 @@
 <!-- extra js end -->
 <script src="<?= base_url("assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") ?>"></script>
 <script src="<?= base_url("assets/plugins/clockpicker/bootstrap-clockpicker.js") ?>"></script>
-
+    <script src="<?= base_url("js/autocomplete.min.js") ?>"></script>
+    
 <script type="text/javascript">
+    var selectedJobOrder = null;
     $(document).ready(function() {
         $("form").submit(function () {
             if(!$("#JobOrderId").length) alert("Please Select the job order");
-            return $("#JobOrderId").length ? true : false   ;
+            else {
+                return confirm("Do Your Want To Save this Record ???  \nIt's " + $("#repair_mode option:selected"  ).text())
+            }
+            return false;
         });
        $('#datatable').DataTable({             "scrollY":        "300px",             "scrollCollapse": true,             "paging":         false         }); 
         $('.datepicker').datepicker({
@@ -251,6 +263,7 @@
 
         $("#datatable").on('click','.data-tr',function (e) {
             var $this = $(this) , obj = $this.data('object') ;
+            selectedJobOrder = obj;
             if(obj.JobOrderId){
                 if($("#JobOrderId").length){
                     $("#JobOrderId").val(obj.JobOrderId)
@@ -263,6 +276,7 @@
                     }).appendTo("form");
                 }
                 $("#RepairModeId").val(obj.RepairModeId);
+                $("#SerialNo").val(obj.SerialNo).removeAttr('disabled');
             }else{
                 location.reload();
             }
@@ -270,6 +284,34 @@
             $this.css({"background-color":"#6c7f8c",'color':'#fff'});
         });
 
+    });
+    $('#SerialNo').autocomplete({
+        'source': function(request, response) {
+            if(selectedJobOrder == null  ) {
+                alert("Please Selete JobOrder First");
+            }else{
+                if(request.length){
+                    $.ajax({
+                        url: Api+"Joborder/product",
+                        data:{str: request , CustomerId : selectedJobOrder.CustomerId },
+                        dataType: 'json',
+                        success: function(json) {
+                            response($.map(json, function(item) {
+                                return {
+                                    label:item['company']+" > "+ item['ItemCode'] + "-"+ item['ItemName'] +" ( "+ item['SerialNo'] +")"  ,
+                                    value: encodeURI(JSON.stringify(item))
+                                }
+                            }));
+                        }
+                    });
+                }
+            }
+        },
+        'select': function(json) {
+            var obj = $.parseJSON(decodeURI(json['value']));
+            $("#SerialNo").val(obj["SerialNo"]);
+            $("#SerialNoId").val(obj["SerialNoId"])
+        }
     });
 </script>
 <!-- extra js end -->
