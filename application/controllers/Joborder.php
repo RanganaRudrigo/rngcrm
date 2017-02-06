@@ -159,6 +159,8 @@ class Joborder  extends MY_Controller {
                 }
             }
 
+            $this->db->group_by("$table.JobOrderId");
+
             $d = [
                 "page" => "$this->_page/passToTechnician",
                 'records' => $this->model->get_many_by(['Status'=> 1 , "JobStatus" => 0 ,'inHouse'=> 0  ])

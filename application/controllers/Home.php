@@ -55,7 +55,6 @@ class Home extends CI_Controller
         $d['notAttendJob'] = $this->_Not_Attend_Jobs();
         $d['workingSolutionJobs'] = $this->_Temporary_Solution();
         $d['collectionPendingJob'] = $this->_Collection_Pending_Report();
-        $d['pendingJob'] = $this->_Collection_Pending_Report();
 
         $this->load->view('dashboard',$d);
     }
@@ -100,17 +99,8 @@ class Home extends CI_Controller
     }
 
     function _pending_jobs(){
-        $this->load->model("Joborder_model",'model');
-        $table = $this->model->table();
-
-       /// $this->load->model('Customer_model');
-       // $this->load->model('Repair_mode_model','repair');
-       // $CustomerTable = $this->Customer_model->table();
-
-       // $this->db->join($CustomerTable , "$CustomerTable.CustomerId = $table.CustomerId");
-        //$this->db->select("ComplainDate  ,JobOrderId,JobOrderType,RepairModeId,SerialNo,company,complainDetails,contactPerson,jobOrderNo ,JobOrderType  ");
-//        return   $this->model->get_many_by(['Status'=> 1 , "JobStatus" => 0 ,'inHouse'=> 0  ]);
-        return   $this->model->count_by(['Status'=> 1 , "JobStatus" => 0 ,'inHouse'=> 0  ]);
+        $this->load->model("Joborder_model" ); 
+        return   $this->Joborder_model->count_by(['Status'=> 1 , "JobStatus" => 0 ,'inHouse'=> 0  ]);
     }
 
     function _quotation_jobs(){
