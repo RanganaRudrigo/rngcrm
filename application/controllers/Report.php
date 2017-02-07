@@ -160,8 +160,9 @@ class Report extends MY_Controller
 
         //_Parts_Pending_Job
         $this->db->join('job_order_to_technician_remove', "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}")
-            ->where('reason','part pending');
-        $records =  array_merge($records, add_element($this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by( array_merge($where,["Status"=>1,'JobStatus NOT'=>[2,4]]) ) ,
+            ->where('reason','part pending')
+            ->where($where);
+        $records =  array_merge($records, add_element($this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by( ["Status"=>1,'JobStatus NOT'=>[2,4]] ) ,
             ['pending_type'=> 'Parts Pending Job' ]) ) ;
 
 
@@ -169,28 +170,30 @@ class Report extends MY_Controller
         $this->load->model('Job_order_close_model');
         $this->db->join( $this->Job_order_close_model->table() ,
             "{$this->Job_order_close_model->table()}.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}"  )
+            ->where($where)
             ->where([
                 "PartUsedFor" => 2 ,
-                "{$this->Job_order_close_model->table()}.Status" => 1 
-                ,'JobStatus NOT'=>[2,4]
+                "{$this->Job_order_close_model->table()}.Status" => 1  
             ])->select("{$this->Joborder_model->table()}.* , {$this->Job_order_close_model->table()}.Note as complainDetails");
         $records = array_merge($records,
-            add_element($this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(array_merge($where,["Status"=>1,'JobStatus NOT'=>[2,4]])) ,
+            add_element($this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by( ["Status"=>1,'JobStatus NOT'=>[2,4]] ) ,
                 ['pending_type'=> 'Quotation Pending Job' ])
             );
 
         //_Not_Attend_Jobs
+        $this->db->where($where);
         $records =  array_merge($records,
             add_element($this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")
-                ->get_many_by(array_merge($where,["Status"=>1 ,'JobStatus'=>1 , 'inHouse'=>0 ])) ,
+                ->get_many_by( ["Status"=>1 ,'JobStatus'=>1 , 'inHouse'=>0 ] ) ,
                 ['pending_type'=> 'Not Attend Jobs' ])
             ) ;
 
         //_Collection_Pending_Report
+        $this->db->where($where);
         $this->load->model("Job_pass_to_courier_model","JobPassToCourier");
         $records = array_merge($records,
             add_element($this->Joborder_model->with("Customer")->with("JOB_TO_TECH")->with("Item")->with("Repair")
-                ->get_many_by(array_merge($where,['JobStatus'=>4,'Status'=>1,'inHouse'=> 0 ])) ,
+                ->get_many_by( ['JobStatus'=>4,'Status'=>1,'inHouse'=> 0 ] ) ,
                 ['pending_type'=> 'Collection Pending Jobs' ])) ;
 
         unique($records,'JobOrderId');
