@@ -54,8 +54,7 @@ class Home extends CI_Controller
         $d['partsPendingJob'] = $this->_Parts_Pending_Job();
         $d['notAttendJob'] = $this->_Not_Attend_Jobs();
         $d['workingSolutionJobs'] = $this->_Temporary_Solution();
-        $d['collectionPendingJob'] = $this->_Collection_Pending_Report();
-
+        $d['collectionPendingJob'] = $this->_Collection_Pending_Report(); 
         $this->load->view('dashboard',$d);
     }
 
@@ -142,9 +141,10 @@ class Home extends CI_Controller
         }
 
         $this->db->join('job_order_to_technician_remove', "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}")
-            ->where('reason','part pending');
+            ->where('reason','part pending')
+        ->select("COUNT(DISTINCT {$this->Joborder_model->table()}.JobOrderId) as count_num");
 
-        return $this->Joborder_model->count_by(["Status"=>1,'JobStatus NOT'=>[2]]);
+        return $this->Joborder_model->get_by(["Status"=>1,'JobStatus NOT'=>[2]])->count_num;
 
     }
 
@@ -156,9 +156,11 @@ class Home extends CI_Controller
         }
         $this->db->join('job_order_to_technician_remove',
             "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}",'LEFT')
-            ->where('reason',NULL);
-        return  $this->Joborder_model
-            ->count_by(["Status"=>1 ,'JobStatus'=> 0 , 'inHouse'=>0 ]);
+            ->where('reason',NULL)
+        ->select("COUNT(DISTINCT {$this->Joborder_model->table()}.JobOrderId) as count_num");
+
+        return $this->Joborder_model->get_by(["Status"=>1 ,'JobStatus'=> 0 , 'inHouse'=>0 ])->count_num;
+
 
     }
 
@@ -170,15 +172,15 @@ class Home extends CI_Controller
         }
 
         $this->db->join('job_order_to_technician_remove', "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}")
-            ->where('reason','temporary solution');
+            ->where('reason','temporary solution')
+            ->select("COUNT(DISTINCT {$this->Joborder_model->table()}.JobOrderId) as count_num");;
 
-        return $this->Joborder_model->count_by(["Status"=>1,'JobStatus NOT'=>[2] ]);
+        return $this->Joborder_model->get_by(["Status"=>1,'JobStatus NOT'=>[2] ])->count_num;
 
     }
 
     function _Collection_Pending_Report(){
-        $this->load->model("Job_pass_to_courier_model","JobPassToCourier");
-        return $this->Joborder_model->count_by(['JobStatus'=> [4] ,'Status'=>1 ]);
+        return  $this->Joborder_model->count_by(['JobStatus'=>3,'Status'=>1,'inHouse'=> 0 ]);
 
     }
 

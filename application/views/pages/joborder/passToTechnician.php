@@ -59,9 +59,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach ($records as $k => $row): ?>
+                                <?php $i=0; foreach ($records as $k => $row): ?>
                                     <tr class="data-tr" data-object="<?= htmlentities(json_encode($row)) ?>" >
-                                        <td> <?= $k + 1 ?>  </td>
+                                        <td> <?= ++$i  ?>  </td>
                                         <td> <?= $row->jobOrderNo ?> </td>
                                         <td> <?= $row->company ?> </td>
                                         <td> <?= $row->reason ?> </td>
