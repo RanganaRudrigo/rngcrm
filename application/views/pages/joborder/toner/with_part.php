@@ -49,25 +49,25 @@
                                 <table id="datatable" class=" table table-striped " >
                                     <thead  > 
                                     <tr>
-                                        <th>#</th>
                                         <th>Job Order No</th>
                                         <th>Customer</th>
                                         <th>Tech</th>
                                         <th>Item</th>
                                         <th>Serial No </th>
                                         <th>Handover Date & Time</th>
+                                        <th>complainDetails</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php foreach ($records as $k => $row): ?>
                                         <tr class="data-tr" data-object="<?= htmlentities(json_encode($row)) ?>" >
-                                            <th scope="row"> <?= $k+1 ?> </th>
-                                            <td><?= $row->jobOrderNo ?></td>
-                                            <td><?= $row->company ?>-<?= $row->contactPerson ?></td>
-                                            <td><?= $row->JOB_TO_TECH->Technician->title ?><?= $row->JOB_TO_TECH->Technician->technicianName ?></td>
-                                            <td><?= $row->Item->ItemCode  ?><?= $row->Item->ItemName  ?></td>
-                                            <td><?= $row->SerialNo  ?> </td>
-                                            <td><?= $row->JOB_TO_TECH->HandoverDate ?> - <?= $row->JOB_TO_TECH->HandoverTime ?> </td>
+                                            <td width="25%" ><?= $row->jobOrderNo ?></td>
+                                            <td width="10%"  ><?= $row->company ?>-<?= $row->contactPerson ?></td>
+                                            <td width="10%"  ><?= $row->JOB_TO_TECH->Technician->title ?><?= $row->JOB_TO_TECH->Technician->technicianName ?></td>
+                                            <td width="10%"  ><?= $row->Item->ItemCode  ?><?= $row->Item->ItemName  ?></td>
+                                            <td width="10%" ><?= $row->SerialNo  ?> </td>
+                                            <td width="20%" ><?= $row->JOB_TO_TECH->HandoverDate ?> - <?= $row->JOB_TO_TECH->HandoverTime ?> </td>
+                                            <td width="10%" ><?= $row->complainDetails ?> </td>
                                         </tr>
                                     <?php endforeach; ?>
                                     </tbody>
@@ -279,6 +279,7 @@
 <script type="text/javascript">
     var selectedJobOrder = null;
     $(document).ready(function() {
+        $(".button-menu-mobile").click();
         $("form").submit(function () {
             if(!$("#JobOrderId").length) alert("Please Select the job order");
             else {

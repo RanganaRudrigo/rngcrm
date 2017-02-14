@@ -181,7 +181,10 @@ class Report extends MY_Controller
             );
 
         //_Not_Attend_Jobs
-        $this->db->where($where);
+        $this->db->join('job_order_to_technician_remove',
+            "job_order_to_technician_remove.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}",'LEFT')
+            ->where('reason',NULL)
+            ->where($where);
         $records =  array_merge($records,
             add_element($this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")
                 ->get_many_by( ["Status"=>1 ,'JobStatus'=>1 , 'inHouse'=>0 ] ) ,
@@ -231,14 +234,12 @@ class Report extends MY_Controller
             "{$this->Job_order_close_model->table()}.{$this->Joborder_model->getPrimaryKey()} = {$this->Joborder_model->table()}.{$this->Joborder_model->getPrimaryKey()}"  )
             ->where([
                 "PartUsedFor" => 2 ,
-                "{$this->Job_order_close_model->table()}.Status" => 1
-            ])->select("{$this->Joborder_model->table()}.* , {$this->Job_order_close_model->table()}.Note as complainDetails");
+            ])->select("{$this->Joborder_model->table()}.* , {$this->Job_order_close_model->table()}.status as JobStatusC , {$this->Job_order_close_model->table()}.Note as complainDetails");
 
 
-        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1,'JobStatus NOT'=>[2,4]]);
+        $d['records'] =  $this->Joborder_model->with("JOB_TO_TECH")->with("Customer")->with("Item")->with("Repair")->get_many_by(["Status"=>1]);
 
-
-        $d["page"] = "$this->page/job_order";
+        $d["page"] = "$this->page/job_order_quotation";
         return $d;
     }
 
